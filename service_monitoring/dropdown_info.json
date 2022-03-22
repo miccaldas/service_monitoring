@@ -1,0 +1,67 @@
+{
+    "dropinfo": [
+        {
+            "app": "main",
+            "name": "Backups Service",
+            "path": "/home/mic/python/backups/backups/celery",
+            "units": [
+                "backups_beats.service",
+                "backups_celery.service"
+            ]
+        },
+        {
+            "app": "celery",
+            "name": "Yay Service",
+            "path": "/home/mic/python/cli_apps/cli_apps/yay_querying/celery/",
+            "units": [
+                "yay_worker.service",
+                "yay_beat.service"
+            ]
+        },
+        {
+            "app": "man",
+            "name": "Git Automate",
+            "path": "/home/mic/python/git_automate/auto/automate",
+            "units": [
+                "git_worker.service",
+                "git_beat.service"
+            ]
+        },
+        {
+            "app": "none",
+            "name": "Home Git Automate",
+            "path": "none",
+            "units": [
+                "home_git_updt.service",
+                "home_git_updt.timer"
+            ]
+        },
+        {
+            "app": "none",
+            "name": "Flower",
+            "path": "none",
+            "units": [
+                "flower.service"
+            ]
+        },
+        {
+            "app": "none",
+            "name": "Pip",
+            "path": "none",
+            "units": [
+                "pypi_updt.service",
+                "pypiupdt.timer"
+            ]
+        },
+        {
+            "app": "none",
+            "name": "service_monitoring",
+            "path": "none",
+            "units": [
+                "service_monitoring.service"
+            ]
+        }
+    ]
+}
+
+
