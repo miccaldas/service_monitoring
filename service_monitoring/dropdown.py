@@ -20,9 +20,12 @@ subprocess.run(["isort", __file__])
 # @snoop
 def dropdown():
     """
-    We'll use Questionary's multiple choice option, to ask what information the user wants.
-    It was also added the 'path' and 'units' values to their respective 'app' and 'resposta'
-    variables so that, when running 'main', all the necessary information is already processed.
+    We'll use Questionary's multiple choice option, to ask what information he wants.
+    It was used variables to identify the questions strings, because this allows for a
+    value, dependent on a series of 'if' statements, to be chosen from them. When I did
+    the same without the loop, the value was always the last if clause value. It was also
+    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,
+    so that, when running 'main', all the necessary information is already processed.
     """
 
     custom_style_monitor = Style(
@@ -45,7 +48,7 @@ def dropdown():
         pointer="++",
         use_indicator=True,
         style=custom_style_monitor,
-        choices=["Backups Service", "Yay Service", "Git Automate", "Home Git Automate", "Flower", "Pip", "Exit"],
+        choices=["Backups Service", "Yay Service", "Git Automate", "Home Git Automate", "Flower", "Pip", "service_monitoring", "home_git_updt", "Exit"],
     ).ask()
 
     resposta = questionary.checkbox(

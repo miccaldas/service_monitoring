@@ -10,24 +10,24 @@ import os
 import subprocess
 import sys
 
+import snoop
+from snoop import pp
+
 from answer_methods import Answers
 from dropdown import dropdown
-
-# import snoop
-# from snoop import pp
 
 
 def type_watch(source, value):
     return "type({})".format(source), type(value)
 
 
-# snoop.install(watch_extras=[type_watch])
+snoop.install(watch_extras=[type_watch])
 
-drop_results = dropdown()
+dropdown = dropdown()
 
 with open("dropdown_info.json", "r") as f:
-    data = f.read()  # It has to be read(), not readlines(), because the latter is a list.
-info = json.loads(data)
+    servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
+info = json.loads(servs)
 
 
 # @snoop
@@ -39,7 +39,7 @@ def answer_methods():
     """
 
     methods = []
-    for i in drop_results[1]:
+    for i in dropdown[1]:
         if ":" in i:
             meth = i.split(":")[1]
             metho = meth.strip()
@@ -66,7 +66,7 @@ def main():
 
     data = []
     for i in range(len(info["dropinfo"])):
-        if drop_results[0] == info["dropinfo"][i]["name"]:
+        if dropdown[0] == info["dropinfo"][i]["name"]:
             data.append(info["dropinfo"][i]["app"])
             data.append(info["dropinfo"][i]["path"])
             data.append(info["dropinfo"][i]["units"])

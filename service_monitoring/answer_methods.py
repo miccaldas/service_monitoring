@@ -17,6 +17,9 @@ import questionary
 import snoop
 from questionary import Separator, Style
 
+from append_to_json import append, entry
+from making_dropdown_file import make_dropdown
+
 subprocess.run(["isort", __file__])
 
 
@@ -185,7 +188,10 @@ class Answers:
     def delete_service(self):
         """
         First stops the unit, then disables it and
-        lastly, deletes files.
+        lastly, deletes files. If service is
+        completely erased, it'll delete also the
+        entry on the json file and run again the
+        dropdown creation file.
         The reason I repeated the 'stop_service'
         and 'daemon_reload' methods, instead of
         simply calling them from this method, is
@@ -219,7 +225,20 @@ class Answers:
             subprocess.run(cmd18, shell=True)
             cmd19 = "sudo systemctl reset-failed"
             subprocess.run(cmd19, shell=True)
-            print("\n\n")
+
+        if len(decision_lst) == len(self.units):
+            select = decision_lst[0].split(".")[0]
+            with open("dropdown_info.json", "r+") as f:
+                data = json.load(f)
+                ndata = [i for i in data["dropinfo"] if i["name"] != select]
+            with open("dropdown_info1.json", "w") as f:
+                f.seek(0)
+                json.dump(ndata, f, indent=4)
+            os.remove("dropdown_info.json")
+            os.rename("dropdown_info1.json", "dropdown_info.json")
+            make_dropdown()
+
+        print("\n\n")
 
     # @snoop
     def create_service(self):
@@ -232,7 +251,8 @@ class Answers:
         as it was for service, but now we use a default timer file.
         These files, pre-built or made now, will be copied to '/usr/lib/systemd/system',
         send the daemon-reload' command, their status checked, to see it they are loaded,
-        started with systemctl and checked again, to see if it is working correctly.
+        started with systemctl and checked again, to see if they are working correctly.
+        This new service will be manually added to the json file and the dropdown file updated.
         """
         custom_style_monitor = Style(
             [
@@ -317,3 +337,6 @@ class Answers:
                     subprocess.run(cmd26, shell=True)
                 if success == "n":
                     pass
+
+        entry()
+        append()

@@ -60,8 +60,15 @@
             "units": [
                 "service_monitoring.service"
             ]
+        },
+        {
+            "app": "none",
+            "name": "home_git_updt",
+            "path": "none",
+            "units": [
+                "home_git_updt.service",
+                "home_git_updt.timer"
+            ]
         }
     ]
 }
-
-

@@ -3,7 +3,7 @@ Because questionaire demands that the choices information be given explicitely,
 it complicated our desire to automate the insertion of new apps to the process.
 The idea is to have a file where all information needed to process a new app,
 can be written on, and, afer, the dropdown file would read it, and update the
-inofrmation on the dropdown. But because it won't accept an iteration like:
+information on it. But because it won't accept an iteration like:
 'for i in apps, print i', we decided to make dynamical the production of the
 file itself. This way we can update a json file with information, run this
 module, and a new and updated 'dropdown.py' is ready for use!
@@ -35,7 +35,7 @@ snoop.install(watch_extras=[type_watch])
 def make_dropdown():
     """
     We go line by line, reconstructing the original
-    structure of the file, stopping only we,
+    structure of the file, stopping only when we
     create loops that will get information from the
     dropdown_info.json file.
     """
@@ -49,15 +49,7 @@ def make_dropdown():
     print(type(res))
     print(len(str(res)))
     print(len(res))
-    print(str(res[0]))
-    print(res[0])
-    print(type(res[0]))
-    print(type(str(res[0])))
-    print(res[0]["units"][0])
-    print(str(res[0]["app"]))
-    print(type(str(res[0]["app"])))
-    for i in range(len(res)):
-        print(str(res[i]["path"]))
+    print(len(res["dropinfo"]))
 
     with open("dropdown.py", "w") as d:
         d.write('"')
@@ -112,8 +104,8 @@ def make_dropdown():
         d.write("        use_indicator=True,\n")
         d.write("        style=custom_style_monitor,\n")
         d.write("        choices=[\n")
-        for i in range(len(res)):
-            d.write(f"          '{res[i]['name']}',\n")
+        for i in range(len(res["dropinfo"])):
+            d.write(f"          '{res['dropinfo'][i]['name']}',\n")
         d.write("          'Exit'\n")
         d.write("               ]\n")
         d.write("           ).ask()\n\n")
