@@ -15,10 +15,9 @@ import click
 import isort  # noqa: F401
 import questionary
 import snoop
-from questionary import Separator, Style
-
-from append_to_json import append, entry
+from append_to_json import entry
 from making_dropdown_file import make_dropdown
+from questionary import Separator, Style
 
 subprocess.run(["isort", __file__])
 
@@ -228,14 +227,15 @@ class Answers:
 
         if len(decision_lst) == len(self.units):
             select = decision_lst[0].split(".")[0]
-            with open("dropdown_info.json", "r+") as f:
+            with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r+") as f:
                 data = json.load(f)
                 ndata = [i for i in data["dropinfo"] if i["name"] != select]
-            with open("dropdown_info1.json", "w") as f:
+            with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info1.json", "w") as f:
                 f.seek(0)
                 json.dump(ndata, f, indent=4)
-            os.remove("dropdown_info.json")
-            os.rename("dropdown_info1.json", "dropdown_info.json")
+            os.remove("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json")
+            monitor = "/home/mic/python/service_monitoring/service_monitoring"
+            os.rename(f"{monitor}/dropdown_info1.json", f"{monitor}/dropdown_info.json")
             make_dropdown()
 
         print("\n\n")
@@ -326,10 +326,10 @@ class Answers:
                     break
                 else:
                     y = "n"
+            cmd26 = f"/usr/bin/sudo /usr/bin/systemctl status {h}"
             if y == "n":
                 print(click.style(f" ++ {h} is not active. We'll open the status view for debugging.", fg="bright_white", bold=True))
                 sleep(0.30)
-                cmd26 = f"/usr/bin/sudo /usr/bin/systemctl status {h}"
                 subprocess.run(cmd26, shell=True)
             if y == "y":
                 success = input(click.style(f"++ {h} is active. Do you want to see its status? [y/n]: ", fg="bright_white", bold=True))
@@ -339,4 +339,3 @@ class Answers:
                     pass
 
         entry()
-        append()

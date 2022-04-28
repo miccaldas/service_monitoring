@@ -9,14 +9,8 @@ import click
 import isort  # noqa: F401
 import questionary
 import snoop
-from loguru import logger
-from questionary import Style
-
 from making_dropdown_file import make_dropdown
-
-fmt = "{time} - {name} - {level} - {message}"
-logger.add("../logs/info.log", level="INFO", format=fmt, backtrace=True, diagnose=True)  # noqa: E501
-logger.add("../logs/error.log", level="ERROR", format=fmt, backtrace=True, diagnose=True)  # noqa: E501
+from questionary import Style
 
 subprocess.run(["isort", __file__])
 
@@ -85,25 +79,6 @@ def entry():
 
     info = [ap, nm, pth, unit_lst]
 
-    return info
-
-
-# @logger.catch
-# @snoop
-def append():
-    """
-    In the 'entry' dictionary we define the
-    service values to be inserted. We load
-    the json file as variable 'data', add
-    the entry values to 'data', define the
-    write position on the file as the beginning,
-    and write the new service to the file.
-    Finally we run 'make_dropdown', that recreates
-    the dropdown file, updated with the newest change.
-    """
-
-    info = entry()
-
     dropinf = {"app": f"{info[0]}", "name": f"{info[1]}", "path": f"{info[2]}", "units": f"{info[3]}"}
 
     with open("dropdown_info.json", "r+") as f:
@@ -118,4 +93,4 @@ def append():
 
 
 if __name__ == "__main__":
-    append()
+    entry()

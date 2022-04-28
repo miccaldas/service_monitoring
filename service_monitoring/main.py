@@ -14,6 +14,7 @@ import snoop
 from snoop import pp
 
 from answer_methods import Answers
+# from answer_methods import Answers
 from dropdown import dropdown
 
 
@@ -23,9 +24,9 @@ def type_watch(source, value):
 
 snoop.install(watch_extras=[type_watch])
 
-dropdown = dropdown()
+dropdown = list(dropdown())
 
-with open("dropdown_info.json", "r") as f:
+with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r") as f:
     servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
 info = json.loads(servs)
 
@@ -49,10 +50,6 @@ def answer_methods():
     return methods
 
 
-if __name__ == "__main__":
-    answer_methods()
-
-
 # @snoop
 def main():
     """
@@ -64,34 +61,47 @@ def main():
 
     methods = answer_methods()
 
-    data = []
-    for i in range(len(info["dropinfo"])):
-        if dropdown[0] == info["dropinfo"][i]["name"]:
-            data.append(info["dropinfo"][i]["app"])
-            data.append(info["dropinfo"][i]["path"])
-            data.append(info["dropinfo"][i]["units"])
-
-    drop = data[0]
-    path = data[1]
-    units = data[2]
-
-    if path != "none":
-        os.chdir(path)
-
-    ress = []
-    answer = Answers(drop, units)
-    for method in methods:
-        res = f"answer.{method}()"
-        ress.append(res)
-
-    for task in ress:
-        print("\n")
-        print("---------------------------------------------------------------------------")
-        print("\n")
-        exec(task)
-
-    if drop == "Exit":
-        sys.exit()
+    if len(dropdown) == 2:
+        for i in dropdown:
+            if i == "Exit":
+                sys.exit()
+        data = []
+        for i in range(len(info["dropinfo"])):
+            if dropdown[0] == info["dropinfo"][i]["name"]:
+                data.append(info["dropinfo"][i]["app"])
+                data.append(info["dropinfo"][i]["path"])
+                data.append(info["dropinfo"][i]["units"])
+            drop = data[0]
+            path = data[1]
+            units = data[2]
+            if path != "none":
+                os.chdir(path)
+            ress = []
+            answer = Answers(drop, units)
+            for method in methods:
+                res = f"answer.{method}()"
+                ress.append(res)
+            for task in ress:
+                print("\n")
+                print("---------------------------------------------------------------------------")
+                print("\n")
+                exec(task)
+            sys.exit()
+    else:
+        drop = dropdown[0]
+        if drop == "Exit":
+            sys.exit()
+        units = dropdown[2]
+        ress = []
+        answer = Answers(drop, units)
+        for method in methods:
+            res = f"answer.{method}()"
+            ress.append(res)
+            for task in ress:
+                print("\n")
+                print("---------------------------------------------------------------------------")
+                print("\n")
+                exec(task)
 
 
 if __name__ == "__main__":

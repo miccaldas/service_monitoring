@@ -42,49 +42,83 @@ def dropdown():
         ]
     )
 
-    app = questionary.select(
-        "What app do you want to use?",
+    ambit = questionary.confirm(
+        "Is your question about a specific service?",
         qmark="[x]",
-        pointer="++",
-        use_indicator=True,
-        style=custom_style_monitor,
-        choices=["Backups Service", "Yay Service", "Git Automate", "Home Git Automate", "Flower", "Pip", "service_monitoring", "home_git_updt", "Exit"],
+        default=False,
+        auto_enter=False,
     ).ask()
 
-    resposta = questionary.checkbox(
-        "What do you want to see?",
-        qmark="[x]",
-        pointer="++",
-        style=custom_style_monitor,
-        choices=[
-            Separator("----- CELERY INFORMATION -----"),
-            "See: Active_Nodes",
-            "See: Stats",
-            "See: Reports",
-            "See: Events",
-            "See: Clock",
-            "See: Scheduled",
-            Separator("----- SYSTEMD INFORMATION -----"),
-            "See: Timers",
-            "See: Active_Services",
-            "See: Service_Status",
-            "See: Service_Logs",
-            Separator("----- SYSTEMD ACTIONS -----"),
-            "See: Stop_Service",
-            "See: Edit_Service",
-            "See: Start_Service",
-            "See: Daemon_Reload",
-            "See: Reset_Failed",
-            "See: Delete_Service",
-            "See: Create_Service",
-            Separator("----- EXIT -----"),
-            "Exit",
-        ],
-    ).ask()
-
-    print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))
-
-    return app, resposta
+    if ambit:
+        app = questionary.select(
+            "What app do you want to use?",
+            qmark="[x]",
+            pointer="++",
+            use_indicator=True,
+            style=custom_style_monitor,
+            choices=[
+                "Backups Service",
+                "Yay Service",
+                "Git Automate",
+                "Home Git Automate",
+                "Flower",
+                "Pip",
+                "service_monitoring",
+                "home_git_updt",
+                Separator("----- EXIT -----"),
+                "Exit",
+            ],
+        ).ask()
+        resposta = questionary.checkbox(
+            "What do you want to see?",
+            qmark="[x]",
+            pointer="++",
+            style=custom_style_monitor,
+            choices=[
+                Separator("----- CELERY INFORMATION -----"),
+                "See: Stats",
+                "See: Reports",
+                Separator("----- SYSTEMD INFORMATION -----"),
+                "See: Service_Status",
+                Separator("----- SYSTEMD ACTIONS -----"),
+                "See: Stop_Service",
+                "See: Edit_Service",
+                "See: Start_Service",
+                "See: Daemon_Reload",
+                "See: Reset_Failed",
+                Separator("----- EXIT -----"),
+                "Exit",
+            ],
+        ).ask()
+        print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))
+        response = [app, resposta]
+        return response
+    else:
+        generalist = questionary.checkbox(
+            "What do you want to see?",
+            qmark="[x]",
+            pointer="++",
+            style=custom_style_monitor,
+            choices=[
+                Separator("----- CELERY INFORMATION -----"),
+                "See: Active_Nodes",
+                "See: Events",
+                "See: Clock",
+                "See: Scheduled",
+                Separator("----- SYSTEMD INFORMATION -----"),
+                "See: Timers",
+                "See: Active_Services",
+                "See: Service_Logs",
+                Separator("----- SYSTEMD ACTIONS -----"),
+                "See: Delete_Service",
+                "See: Create_Service",
+                Separator("----- EXIT -----"),
+                "Exit",
+            ],
+        ).ask()
+        print(click.style(f"generalist: {generalist}", fg="bright_white", bold=True))
+        general = ["dummy_app", generalist, "dummy_service"]
+        return general
 
 
 if __name__ == "__main__":
