@@ -25,7 +25,7 @@ def type_watch(source, value):
 snoop.install(watch_extras=[type_watch])
 
 
-@snoop
+# @snoop
 def make_dropdown():
     """
     We go line by line, reconstructing the original
@@ -34,18 +34,16 @@ def make_dropdown():
     dropdown_info.json file.
     """
 
-    with open("dropdown_info.json", "r") as f:
+    info = "/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json"
+
+    with open(info, "r") as f:
         data = f.read()  # It has to be read(), not readlines(), because the latter is a list.
 
     res = json.loads(data)
 
-    print(res)
-    print(type(res))
-    print(len(str(res)))
-    print(len(res))
-    print(len(res["dropinfo"]))
+    drop = "/home/mic/python/service_monitoring/service_monitoring/dropdown.py"
 
-    with open("dropdown.py", "w") as d:
+    with open(drop, "w") as d:
         d.write('"')
         d.write('"')
         d.write('"\n')
@@ -98,44 +96,50 @@ def make_dropdown():
         d.write("         auto_enter=False,\n")
         d.write("    ).ask()\n\n")
         d.write("    if ambit:\n")
-        d.write("         app = questionary.select(\n")
-        d.write('             "What app do you want to use?",\n')
-        d.write('             qmark="[x]",\n')
-        d.write('             pointer="++",\n')
-        d.write("             use_indicator=True,\n")
-        d.write("             style=custom_style_monitor,\n")
-        d.write("             choices=[\n")
+        d.write("        app = questionary.select(\n")
+        d.write('            "What app do you want to use?",\n')
+        d.write('            qmark="[x]",\n')
+        d.write('            pointer="++",\n')
+        d.write("            use_indicator=True,\n")
+        d.write("            style=custom_style_monitor,\n")
+        d.write("            choices=[\n")
         for i in range(len(res["dropinfo"])):
             d.write(f"               '{res['dropinfo'][i]['name']}',\n")
         d.write('               Separator("----- EXIT -----"),\n')
         d.write("               'Exit'\n")
         d.write("            ]\n")
         d.write("        ).ask()\n")
-        d.write("         resposta = questionary.checkbox(\n")
-        d.write('             "What do you want to see?",\n')
-        d.write('             qmark="[x]",\n')
-        d.write('             pointer="++",\n')
-        d.write("            style=custom_style_monitor,\n")
-        d.write("            choices=[\n")
-        d.write('                Separator("----- CELERY INFORMATION -----"),\n')
-        d.write('                "See: Stats",\n')
-        d.write('                "See: Reports",\n')
-        d.write('                Separator("----- SYSTEMD INFORMATION -----"),\n')
-        d.write('                "See: Service_Status",\n')
-        d.write('                Separator("----- SYSTEMD ACTIONS -----"),\n')
-        d.write('                "See: Stop_Service",\n')
-        d.write('                "See: Edit_Service",\n')
-        d.write('                "See: Start_Service",\n')
-        d.write('                "See: Daemon_Reload",\n')
-        d.write('                "See: Reset_Failed",\n')
-        d.write('                Separator("----- EXIT -----"),\n')
-        d.write('                "Exit",\n')
-        d.write("             ],\n")
-        d.write("         ).ask()\n")
-        d.write('         print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n')
-        d.write("         response = [app, resposta]\n")
-        d.write("         return response\n")
-        d.write("    else:\n")
+        d.write("        resposta = questionary.checkbox(\n")
+        d.write('            "What do you want to see?",\n')
+        d.write('            qmark="[x]",\n')
+        d.write('            pointer="++",\n')
+        d.write("           style=custom_style_monitor,\n")
+        d.write("           choices=[\n")
+        d.write('               Separator("----- CELERY INFORMATION -----"),\n')
+        d.write('               "See: Clock",\n')
+        d.write('               "See: Scheduled",\n')
+        d.write('               "See: Stats",\n')
+        d.write('               "See: Reports",\n')
+        d.write('               "See: Events",\n')
+        d.write('               Separator("----- SYSTEMD INFORMATION -----"),\n')
+        d.write('               "See: Service_Status",\n')
+        d.write('               "See: Service_Logs",\n')
+        d.write('               Separator("----- SYSTEMD ACTIONS -----"),\n')
+        d.write('               "See: Delete_Service",\n')
+        d.write('               "See: Create_Service",\n')
+        d.write('               "See: Stop_Service",\n')
+        d.write('               "See: Edit_Service",\n')
+        d.write('               "See: Start_Service",\n')
+        d.write('               "See: Daemon_Reload",\n')
+        d.write('               "See: Reset_Failed",\n')
+        d.write('               Separator("----- EXIT -----"),\n')
+        d.write('               "Exit",\n')
+        d.write("            ],\n")
+        d.write("        ).ask()\n")
+        d.write('        print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n')
+        d.write("        response = [app, resposta]\n")
+        d.write("        return response\n\n")
+        d.write("    if ambit is False:\n")
         d.write("        generalist = questionary.checkbox(\n")
         d.write('            "What do you want to see?",\n')
         d.write('            qmark="[x]",\n')
@@ -144,9 +148,6 @@ def make_dropdown():
         d.write("            choices=[\n")
         d.write('                Separator("----- CELERY INFORMATION -----"),\n')
         d.write('                "See: Active_Nodes",\n')
-        d.write('                "See: Events",\n')
-        d.write('                "See: Clock",\n')
-        d.write('                "See: Scheduled",\n')
         d.write('                Separator("----- SYSTEMD INFORMATION -----"),\n')
         d.write('                "See: Timers",\n')
         d.write('                "See: Active_Services",\n')

@@ -14,7 +14,6 @@ import snoop
 from snoop import pp
 
 from answer_methods import Answers
-# from answer_methods import Answers
 from dropdown import dropdown
 
 
@@ -22,14 +21,13 @@ def type_watch(source, value):
     return "type({})".format(source), type(value)
 
 
-snoop.install(watch_extras=[type_watch])
+# snoop.install(watch_extras=[type_watch])
 
 dropdown = list(dropdown())
 
 with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r") as f:
     servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
 info = json.loads(servs)
-
 
 # @snoop
 def answer_methods():
@@ -61,7 +59,7 @@ def main():
 
     methods = answer_methods()
 
-    if len(dropdown) == 2:
+    if "dummy_service" not in dropdown:
         for i in dropdown:
             if i == "Exit":
                 sys.exit()
@@ -71,27 +69,26 @@ def main():
                 data.append(info["dropinfo"][i]["app"])
                 data.append(info["dropinfo"][i]["path"])
                 data.append(info["dropinfo"][i]["units"])
-            drop = data[0]
-            path = data[1]
-            units = data[2]
-            if path != "none":
-                os.chdir(path)
-            ress = []
-            answer = Answers(drop, units)
-            for method in methods:
-                res = f"answer.{method}()"
-                ress.append(res)
-            for task in ress:
-                print("\n")
-                print("---------------------------------------------------------------------------")
-                print("\n")
-                exec(task)
-            sys.exit()
+                drop = data[0]
+                path = data[1]
+                units = data[2]
+                if path != "none":
+                    os.chdir(path)
+                ress = []
+                answer = Answers(drop, units)
+                for method in methods:
+                    res = f"answer.{method}()"
+                    ress.append(res)
+                for task in ress:
+                    print("\n")
+                    print("---------------------------------------------------------------------------")
+                    print("\n")
+                    exec(task)
     else:
         drop = dropdown[0]
         if drop == "Exit":
             sys.exit()
-        units = dropdown[2]
+        units = dropdown[1]
         ress = []
         answer = Answers(drop, units)
         for method in methods:

@@ -11,6 +11,7 @@ import questionary
 import snoop
 from making_dropdown_file import make_dropdown
 from questionary import Style
+from snoop import pp
 
 subprocess.run(["isort", __file__])
 
@@ -34,6 +35,8 @@ def entry():
     linebreak symbol.
     """
 
+    json_file = "/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json"
+
     custom_style_monitor = Style(
         [
             ("qmark", "fg:#8E806A bold"),
@@ -48,48 +51,66 @@ def entry():
         ]
     )
 
-    ap = questionary.text(
-        "What is the app name?",
+    su = questionary.confirm(
+        "Did you created a new service?",
         qmark="[x]",
-        instruction="Write 'none' if not applicable.",
-        style=custom_style_monitor,
+        default=True,
+        auto_enter=False,
     ).ask()
 
-    nm = questionary.text(
-        "What is the name?",
-        qmark="[x]",
-        style=custom_style_monitor,
-    ).ask()
-
-    pth = questionary.text(
-        "What is the app's path?",
-        qmark="[x]",
-        instruction="Write 'none' if not applicable.",
-        style=custom_style_monitor,
-    ).ask()
-
-    nts = questionary.text(
-        "What are the app's units?",
-        qmark="[x]",
-        multiline=True,
-        style=custom_style_monitor,
-    ).ask()
-
-    unit_lst = nts.split("\n")
-
-    info = [ap, nm, pth, unit_lst]
-
-    dropinf = {"app": f"{info[0]}", "name": f"{info[1]}", "path": f"{info[2]}", "units": f"{info[3]}"}
-
-    with open("dropdown_info.json", "r+") as f:
-        data = json.load(f)
-        data["dropinfo"].append(dropinf)
-        f.seek(0)
-        json.dump(data, f, indent=4)
-
-    make_dropdown()
-
-    print(click.style(f"Added to the json file the service with the info: {dropinf}", fg="bright_white", bold=True))
+    if su:
+        ap = questionary.text(
+            "What is the app name?",
+            qmark="[x]",
+            instruction="Write 'none' if not applicable.",
+            style=custom_style_monitor,
+        ).ask()
+        nm = questionary.text(
+            "What is the name?",
+            qmark="[x]",
+            style=custom_style_monitor,
+        ).ask()
+        pth = questionary.text(
+            "What is the app's path?",
+            qmark="[x]",
+            instruction="Write 'none' if not applicable.",
+            style=custom_style_monitor,
+        ).ask()
+        nts = questionary.text(
+            "What are the app's units?",
+            qmark="[x]",
+            multiline=True,
+            style=custom_style_monitor,
+        ).ask()
+        unit_lst = nts.split("\n")
+        info = [ap, nm, pth, unit_lst]
+        dropinf = {"app": f"{info[0]}", "name": f"{info[1]}", "path": f"{info[2]}", "units": info[3]}
+        with open(json_file, "r+") as f:
+            data = json.load(f)
+            data["dropinfo"].append(dropinf)
+            f.seek(0)
+            json.dump(data, f, indent=4)
+        print(click.style(f"Added to the json file the service with the info: {dropinf}", fg="bright_white", bold=True))
+    else:
+        nm = questionary.text(
+            "What is the name?",
+            qmark="[x]",
+            style=custom_style_monitor,
+        ).ask()
+        nts = questionary.text(
+            "What is the unit's name?",
+            qmark="[x]",
+            style=custom_style_monitor,
+        ).ask()
+        with open(json_file, "r+") as f:
+            data = json.load(f)
+            for i in range(len(data["dropinfo"])):
+                if nm == data["dropinfo"][i]["name"]:
+                    data["dropinfo"][i]["units"].append(nts)
+                    f.seek(0)
+                    json.dump(data, f, indent=4)
+                    break
+        print(click.style(f"Added to the service {nm} the unit {nts}", fg="bright_white", bold=True))
 
 
 if __name__ == "__main__":

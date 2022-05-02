@@ -56,18 +56,7 @@ def dropdown():
             pointer="++",
             use_indicator=True,
             style=custom_style_monitor,
-            choices=[
-                "Backups Service",
-                "Yay Service",
-                "Git Automate",
-                "Home Git Automate",
-                "Flower",
-                "Pip",
-                "service_monitoring",
-                "home_git_updt",
-                Separator("----- EXIT -----"),
-                "Exit",
-            ],
+            choices=["Backups Service", "Yay Service", "Flower", "Pip", Separator("----- EXIT -----"), "Exit"],
         ).ask()
         resposta = questionary.checkbox(
             "What do you want to see?",
@@ -76,11 +65,17 @@ def dropdown():
             style=custom_style_monitor,
             choices=[
                 Separator("----- CELERY INFORMATION -----"),
+                "See: Clock",
+                "See: Scheduled",
                 "See: Stats",
                 "See: Reports",
+                "See: Events",
                 Separator("----- SYSTEMD INFORMATION -----"),
                 "See: Service_Status",
+                "See: Service_Logs",
                 Separator("----- SYSTEMD ACTIONS -----"),
+                "See: Delete_Service",
+                "See: Create_Service",
                 "See: Stop_Service",
                 "See: Edit_Service",
                 "See: Start_Service",
@@ -93,7 +88,8 @@ def dropdown():
         print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))
         response = [app, resposta]
         return response
-    else:
+
+    if ambit is False:
         generalist = questionary.checkbox(
             "What do you want to see?",
             qmark="[x]",
@@ -102,9 +98,6 @@ def dropdown():
             choices=[
                 Separator("----- CELERY INFORMATION -----"),
                 "See: Active_Nodes",
-                "See: Events",
-                "See: Clock",
-                "See: Scheduled",
                 Separator("----- SYSTEMD INFORMATION -----"),
                 "See: Timers",
                 "See: Active_Services",

@@ -18,6 +18,7 @@ import snoop
 from append_to_json import entry
 from making_dropdown_file import make_dropdown
 from questionary import Separator, Style
+from snoop import pp
 
 subprocess.run(["isort", __file__])
 
@@ -26,10 +27,30 @@ def type_watch(source, value):
     return "type({})".format(source), type(value)
 
 
-# snoop.install(watch_extras=[type_watch])
+snoop.install(watch_extras=[type_watch])
+
+with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r") as f:
+    servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
+    info = json.loads(servs)
+
+custom_style_monitor = Style(
+    [
+        ("qmark", "fg:#ff5c8d bold"),
+        ("question", "fg:#E0DDAA bold"),
+        ("pointer", "fg:#BB6464 bold"),
+        ("highlighted", "fg:#E5E3C9 bold"),
+        ("selected", "fg:#94B49F bold"),
+        ("text", "fg:#F1E0AC bold"),
+    ]
+)
 
 
 class Answers:
+    """
+    This class houses all the actions that the user chooses.
+    Each one is a command to be executed or a script to be run.
+    """
+
     def __init__(self, drop, units):
         self.drop = drop
         self.units = units
@@ -125,9 +146,20 @@ class Answers:
         """
         See logs for the services.
         """
-        cmd9 = "sudo journalctl | grep python3"
-        subprocess.run(cmd9, shell=True)
-        print("\n\n")
+        units = [str(i) for i in self.units]
+        if "dummy_service" not in self.units:
+            for unit in units:
+                choice = input(click.style(f"[*] - Do you want to see logs for {unit}? [y/n] ", fg="bright_green", bold=True))
+                if choice == "y":
+                    cmd9 = f"sudo SYSTEMD_COLORS=1 journalctl | grep {choice}"  # Without SYSTEMD_COLORS, the output is monochrome.
+                    subprocess.run(cmd9, shell=True)
+                    print("\n\n")
+                else:
+                    pass
+        else:
+            cmd9_1 = "sudo SYSTEMD_COLORS=1 journalctl | grep python3"
+            subprocess.run(cmd9_1, shell=True)
+            print("\n\n")
 
     # @snoop
     def stop_service(self):
@@ -151,16 +183,6 @@ class Answers:
             print("\n\n")
 
     # @snoop
-    def edit_service(self):
-        """
-        Opens the service or timer
-        in $EDITOR.
-        """
-        for unit in self.units:
-            cmd12 = f"sudo vim '/usr/lib/systemd/system/{unit}'"
-            subprocess.run(cmd12, shell=True)
-
-    # @snoop
     def daemon_reload(self):
         """
         Reloads the daemons of all services and timers.
@@ -170,6 +192,28 @@ class Answers:
         cmd13 = "sudo systemctl daemon-reload"
         subprocess.run(cmd13, shell=True)
         print("\n\n")
+
+    # @snoop
+    def edit_service(self):
+        """
+        Stops the units, opens the service or timer
+        in $EDITOR, reloads Systemmd daemon and
+        restarts units.
+        The reason I copied the code from the other
+        methods and not just called their functions from
+        here, is due to the fact that each loops through
+        the self.units variable. If I had called them,
+        there would be a lot of unnecessary looping.
+        """
+        for unit in self.units:
+            cmd10 = f"sudo systemctl stop {unit}"
+            subprocess.run(cmd10, shell=True)
+            cmd12 = f"sudo vim '/usr/lib/systemd/system/{unit}'"
+            subprocess.run(cmd12, shell=True)
+            cmd13 = "sudo systemctl daemon-reload"
+            subprocess.run(cmd13, shell=True)
+            cmd11 = f"sudo systemctl start {unit}"
+            subprocess.run(cmd11, shell=True)
 
     # @snoop
     def reset_failed(self):
@@ -199,44 +243,54 @@ class Answers:
         way the presentation is cleaner.
         """
         decision_lst = []
-        target = input(click.style(" ++ Do you want to delete a unit of your chosen app? [y/n] ", fg="bright_white", bold=True))
-        if target == "y":
+
+        if "dummy_service" not in self.units:
             for unit in self.units:
                 decision = input(click.style(f" ++ Do you want to disable unit {unit}? [y/n] ", fg="bright_white", bold=True))
                 if decision == "y":
                     decision_lst.append(f"{unit}")
-        if target == "n":
-            nodecision = input(click.style(" ++ Do you want to a delete another service? [y/n] ", fg="bright_white", bold=True))
-            if nodecision == "y":
-                serv_name = input(click.style(" ++ Please tell us the name of the service: ", fg="bright_white", bold=True))
-                decision_lst.append(serv_name)
-        if nodecision == "n":
-            sys.exit()
+        else:
+            deci = input(click.style(" ++ What unit(s) do you want to delete? ", fg="bright_white", bold=True))
+            if deci == "":
+                sys.exit()
+            else:
+                decision = deci.split(" ")
+            for i in decision:
+                decision_lst.append(i)
 
         for service in decision_lst:
             cmd15 = f"sudo systemctl stop {service}"
             subprocess.run(cmd15, shell=True)
             cmd16 = f"sudo systemctl disable {service}"
             subprocess.run(cmd16, shell=True)
-            cmd17 = "sudo systemctl daemon-reload"
-            subprocess.run(cmd17, shell=True)
             cmd18 = f"sudo rm /usr/lib/systemd/system/{service}"
             subprocess.run(cmd18, shell=True)
+            cmd17 = "sudo systemctl daemon-reload"
+            subprocess.run(cmd17, shell=True)
             cmd19 = "sudo systemctl reset-failed"
             subprocess.run(cmd19, shell=True)
 
-        if len(decision_lst) == len(self.units):
-            select = decision_lst[0].split(".")[0]
-            with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r+") as f:
-                data = json.load(f)
-                ndata = [i for i in data["dropinfo"] if i["name"] != select]
-            with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info1.json", "w") as f:
-                f.seek(0)
-                json.dump(ndata, f, indent=4)
-            os.remove("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json")
-            monitor = "/home/mic/python/service_monitoring/service_monitoring"
+        monitor = "/home/mic/python/service_monitoring/service_monitoring"
+        data = json.load(open(f"{monitor}/dropdown_info.json"))
+
+        for i in range(len(data["dropinfo"])):
+            if decision_lst == data["dropinfo"][i]["units"]:
+                data["dropinfo"].pop(i)
+            open(f"{monitor}/dropdown_info1.json", "w").write(json.dumps(data, indent=4, sort_keys=True))
+            os.remove(f"{monitor}/dropdown_info.json")
             os.rename(f"{monitor}/dropdown_info1.json", f"{monitor}/dropdown_info.json")
             make_dropdown()
+
+        tst = [v.get("units") for v in data["dropinfo"]]
+        if decision_lst not in tst:
+            for u in decision_lst:
+                for t in range(len(data["dropinfo"])):
+                    if u in data["dropinfo"][t]["units"]:
+                        data["dropinfo"][t]["units"].remove(u)
+                    open(f"{monitor}/dropdown_info1.json", "w").write(json.dumps(data, indent=4, sort_keys=True))
+                    os.remove(f"{monitor}/dropdown_info.json")
+                    os.rename(f"{monitor}/dropdown_info1.json", f"{monitor}/dropdown_info.json")
+                    make_dropdown()
 
         print("\n\n")
 
@@ -254,20 +308,12 @@ class Answers:
         started with systemctl and checked again, to see if they are working correctly.
         This new service will be manually added to the json file and the dropdown file updated.
         """
-        custom_style_monitor = Style(
-            [
-                ("qmark", "fg:#ff5c8d bold"),
-                ("question", "fg:#E0DDAA bold"),
-                ("pointer", "fg:#BB6464 bold"),
-                ("highlighted", "fg:#E5E3C9 bold"),
-                ("selected", "fg:#94B49F bold"),
-                ("text", "fg:#F1E0AC bold"),
-            ]
-        )
-
         cwds = os.getcwd()
-        files = os.listdir(cwds)
-        services_present = [i for i in files if i.endswith(".service") or i.endswith(".timer")]
+        services = []
+        for root, dirs, files in os.walk(cwds):
+            for file in files:
+                services.append(file)
+        services_present = [i for i in services if i.endswith(".service") or i.endswith(".timer")]
 
         chosen_units = []
         user_negs = []
@@ -285,11 +331,15 @@ class Answers:
                 pointer="++",
                 use_indicator=True,
                 style=custom_style_monitor,
-                choices=["Service", "Timer", "Both", "Exit"],
+                choices=["Service", "Timer", "Both", "None", "Exit"],
             ).ask()
             tail = os.path.basename(os.path.normpath(cwds))
             cmd20 = f"sudo /usr/bin/vim {tail}.service"
             cmd21 = f"sudo /usr/bin/vim {tail}.timer"
+            if unit_making == "None":
+                pass
+            if unit_making == "Exit":
+                sys.exit()
             if unit_making == "Service":
                 subprocess.run(cmd20, cwd=cwds, shell=True)
                 chosen_units.append(f"{tail}.service")
@@ -301,8 +351,6 @@ class Answers:
                 subprocess.run(cmd21, cwd=cwds, shell=True)
                 chosen_units.append(f"{tail}.service")
                 chosen_units.append(f"{tail}.timer")
-            if unit_making == "Exit":
-                sys.exit()
 
         for h in chosen_units:
             cmd22 = f"/usr/bin/sudo /usr/bin/cp {h} '/usr/lib/systemd/system/'"
@@ -314,28 +362,24 @@ class Answers:
             cmd25 = f"/usr/bin/sudo /usr/bin/systemctl status {h} > {h}.txt"
             subprocess.run(cmd25, shell=True)
 
+        cmd26 = f"/usr/bin/sudo /usr/bin/systemctl status {h}"
+        sleep(0.30)
         if f"{h}.txt":
             with open(f"{h}.txt", "r") as f:
                 data = f.readlines()
-            print(data)
             print("\n")
             for line in data:
                 x = re.search("^\s+Active: active \(running\).+\n$", line)
-                if x:
-                    y = "y"
+                w = re.search("^\s+Active: active \(waiting\).+\n$", line)
+                if x or w:
+                    success = input(click.style(f"++ {h} is active. Do you want to see its status? [y/n]: ", fg="bright_white", bold=True))
+                    if success == "y":
+                        subprocess.run(cmd26, shell=True)
                     break
                 else:
-                    y = "n"
-            cmd26 = f"/usr/bin/sudo /usr/bin/systemctl status {h}"
-            if y == "n":
-                print(click.style(f" ++ {h} is not active. We'll open the status view for debugging.", fg="bright_white", bold=True))
-                sleep(0.30)
-                subprocess.run(cmd26, shell=True)
-            if y == "y":
-                success = input(click.style(f"++ {h} is active. Do you want to see its status? [y/n]: ", fg="bright_white", bold=True))
-                if success == "y":
+                    print(click.style(f" ++ {h} is not active. We'll open the status view for debugging.", fg="bright_white", bold=True))
+                    sleep(0.30)
                     subprocess.run(cmd26, shell=True)
-                if success == "n":
-                    pass
-
+                    break
         entry()
+        make_dropdown()
