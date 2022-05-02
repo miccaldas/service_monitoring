@@ -11,12 +11,13 @@ import subprocess
 import sys
 from time import sleep
 
+from append_to_json import entry
+from making_dropdown_file import make_dropdown
+
 import click
 import isort  # noqa: F401
 import questionary
 import snoop
-from append_to_json import entry
-from making_dropdown_file import make_dropdown
 from questionary import Separator, Style
 from snoop import pp
 
