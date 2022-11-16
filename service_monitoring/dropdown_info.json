@@ -1,24 +1,6 @@
 {
     "dropinfo": [
         {
-            "app": "main",
-            "name": "Backups Service",
-            "path": "/home/mic/python/backups/backups/celery",
-            "units": [
-                "backups_beats.service",
-                "backups_celery.service"
-            ]
-        },
-        {
-            "app": "celery",
-            "name": "Yay Service",
-            "path": "/home/mic/python/cli_apps/cli_apps/yay_querying/celery/",
-            "units": [
-                "yay_worker.service",
-                "yay_beat.service"
-            ]
-        },
-        {
             "app": "none",
             "name": "Flower",
             "path": "none",
@@ -33,6 +15,31 @@
             "units": [
                 "pypi_updt.service",
                 "pypiupdt.timer"
+            ]
+        },
+        {
+            "app": "none",
+            "name": "Yay Querying",
+            "path": "none",
+            "units": [
+                "yay_querying.service",
+                "yay_querying.timer"
+            ]
+        },
+        {
+            "app": "none",
+            "name": "Watchdog",
+            "path": "none",
+            "units": [
+                "old_projects_watchdog"
+            ]
+        },
+        {
+            "app": "tasks",
+            "name": "Bkmks Cleaning",
+            "path": "/home/mic/python/bkmks_python/bkmks_python/db_cleaning",
+            "units": [
+                "db_cleaning.service"
             ]
         }
     ]

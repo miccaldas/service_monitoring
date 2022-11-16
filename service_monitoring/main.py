@@ -29,6 +29,7 @@ with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.
     servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
 info = json.loads(servs)
 
+
 # @snoop
 def answer_methods():
     """
@@ -88,7 +89,7 @@ def main():
         drop = dropdown[0]
         if drop == "Exit":
             sys.exit()
-        units = dropdown[1]
+        units = dropdown[2]
         ress = []
         answer = Answers(drop, units)
         for method in methods:

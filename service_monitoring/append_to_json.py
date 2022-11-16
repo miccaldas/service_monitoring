@@ -5,12 +5,11 @@ import json
 import subprocess
 import sys
 
-from making_dropdown_file import make_dropdown
-
 import click
 import isort  # noqa: F401
 import questionary
 import snoop
+from making_dropdown_file import make_dropdown
 from questionary import Style
 from snoop import pp
 

@@ -94,6 +94,7 @@ def make_dropdown():
         d.write("         qmark='[x]',\n")
         d.write("         default=False,\n")
         d.write("         auto_enter=False,\n")
+        d.write("         style=custom_style_monitor,\n")
         d.write("    ).ask()\n\n")
         d.write("    if ambit:\n")
         d.write("        app = questionary.select(\n")
