@@ -248,7 +248,7 @@ class Answers:
             for unit in self.units:
                 decision = input(click.style(f" ++ Do you want to disable unit {unit}? [y/n] ", fg="bright_white", bold=True))
                 if decision == "y":
-                    decision_lst.append(f"{unit}")
+                    decision_lst.append(f"{unit}.service")
         else:
             deci = input(click.style(" ++ What unit(s) do you want to delete? ", fg="bright_white", bold=True))
             if deci == "":

@@ -27,14 +27,6 @@
             ]
         },
         {
-            "app": "none",
-            "name": "Watchdog",
-            "path": "none",
-            "units": [
-                "old_projects_watchdog"
-            ]
-        },
-        {
             "app": "tasks",
             "name": "Bkmks Cleaning",
             "path": "/home/mic/python/bkmks_python/bkmks_python/db_cleaning",
