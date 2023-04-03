@@ -13,8 +13,8 @@ import sys
 import snoop
 from snoop import pp
 
-from answer_methods import Answers
-from dropdown import dropdown
+from service_monitoring.answer_methods import Answers
+from service_monitoring.dropdown import dropdown
 
 
 def type_watch(source, value):
@@ -25,8 +25,12 @@ def type_watch(source, value):
 
 dropdown = list(dropdown())
 
-with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r") as f:
-    servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
+with open(
+    "/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r"
+) as f:
+    servs = (
+        f.read()
+    )  # It has to be read(), not readlines(), because the latter is a list.
 info = json.loads(servs)
 
 
@@ -82,7 +86,9 @@ def main():
                     ress.append(res)
                 for task in ress:
                     print("\n")
-                    print("---------------------------------------------------------------------------")
+                    print(
+                        "---------------------------------------------------------------------------"
+                    )
                     print("\n")
                     exec(task)
     else:
@@ -97,7 +103,9 @@ def main():
             ress.append(res)
             for task in ress:
                 print("\n")
-                print("---------------------------------------------------------------------------")
+                print(
+                    "---------------------------------------------------------------------------"
+                )
                 print("\n")
                 exec(task)
 

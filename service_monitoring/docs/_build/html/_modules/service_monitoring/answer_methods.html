@@ -1,0 +1,753 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 6.1.3 and Furo 2023.03.27 -->
+        <title>service_monitoring.answer_methods - Services Monitoring 0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Services Monitoring 0.2 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Services Monitoring 0.2 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../answer_methods.html">Answer Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../append_to_json.html">Append to Json</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dropdown.html">Dropdown</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../main.html">Main</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../make_dropdown.html">Making Dropdown</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for service_monitoring.answer_methods</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module that houses a class that encompasses</span>
+<span class="sd">all the methods that&#39;ll create the answers</span>
+<span class="sd">to the questionnaire questions.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="kn">import</span> <span class="nn">click</span>
+<span class="kn">import</span> <span class="nn">isort</span>  <span class="c1"># noqa: F401</span>
+<span class="kn">import</span> <span class="nn">questionary</span>
+<span class="kn">import</span> <span class="nn">snoop</span>
+<span class="kn">from</span> <span class="nn">questionary</span> <span class="kn">import</span> <span class="n">Separator</span><span class="p">,</span> <span class="n">Style</span>
+<span class="kn">from</span> <span class="nn">service_monitoring.append_to_json</span> <span class="kn">import</span> <span class="n">entry</span>
+<span class="kn">from</span> <span class="nn">service_monitoring.make_dropdown</span> <span class="kn">import</span> <span class="n">make_dropdown</span>
+<span class="kn">from</span> <span class="nn">snoop</span> <span class="kn">import</span> <span class="n">pp</span>
+
+<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;isort&quot;</span><span class="p">,</span> <span class="vm">__file__</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">type_watch</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;type(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<span class="n">snoop</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">watch_extras</span><span class="o">=</span><span class="p">[</span><span class="n">type_watch</span><span class="p">])</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+    <span class="s2">&quot;/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">servs</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="p">)</span>  <span class="c1"># It has to be read(), not readlines(), because the latter is a list.</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">servs</span><span class="p">)</span>
+
+<span class="n">custom_style_monitor</span> <span class="o">=</span> <span class="n">Style</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;qmark&quot;</span><span class="p">,</span> <span class="s2">&quot;fg:#ff5c8d bold&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="s2">&quot;fg:#E0DDAA bold&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pointer&quot;</span><span class="p">,</span> <span class="s2">&quot;fg:#BB6464 bold&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;highlighted&quot;</span><span class="p">,</span> <span class="s2">&quot;fg:#E5E3C9 bold&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;selected&quot;</span><span class="p">,</span> <span class="s2">&quot;fg:#94B49F bold&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;fg:#F1E0AC bold&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="Answers"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers">[docs]</a><span class="k">class</span> <span class="nc">Answers</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class houses all the actions that the user chooses.</span>
+<span class="sd">    Each one is a command to be executed or a script to be run.</span>
+<span class="sd">    It needs two values to be instantiated:</span>
+
+<span class="sd">    :param str drop: What application do we want to use?</span>
+<span class="sd">    :param str units: Chooses what method to implement.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drop</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drop</span> <span class="o">=</span> <span class="n">drop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">units</span>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.active_nodes"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.active_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">active_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        How many Celery active nodes are there now?\n</span>
+<span class="sd">        Requires a  *drop* value.\n</span>
+<span class="sd">        This method runs the following Celery command::</span>
+
+<span class="sd">            celery -A &lt;application_name&gt; inspect active</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;celery -A </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="si">}</span><span class="s2"> inspect active&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.stats"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.stats">[docs]</a>    <span class="k">def</span> <span class="nf">stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Show Celery workers statistics.\n</span>
+<span class="sd">        Requires a *drop* value.\n</span>
+<span class="sd">        This method runs the following Celery command::</span>
+
+<span class="sd">            celery -A &lt;application_name&gt; inspect stats</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd1</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;celery -A </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="si">}</span><span class="s2"> inspect stats&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd1</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.reports"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.reports">[docs]</a>    <span class="k">def</span> <span class="nf">reports</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns inspect report value.\n</span>
+<span class="sd">        Requires a *drop* value.\n</span>
+<span class="sd">        This method runs the following Celery command::</span>
+
+<span class="sd">           celery -A &lt;application_name&gt; inspect report</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd2</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;celery -A </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="si">}</span><span class="s2"> inspect report&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd2</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.events"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.events">[docs]</a>    <span class="k">def</span> <span class="nf">events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See Celery remote control events.\n</span>
+<span class="sd">        Requires a *drop* value.\n</span>
+<span class="sd">        This method runs the following Celery command::</span>
+
+<span class="sd">           celery -A &lt;application_name&gt; control events -d</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd3</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;celery -A </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="si">}</span><span class="s2"> control events -d&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd3</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.clock"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.clock">[docs]</a>    <span class="k">def</span> <span class="nf">clock</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sees clock of Celery&#39;s workers.\n</span>
+<span class="sd">        Requires a *drop* value.\n</span>
+<span class="sd">        This method runs the following Celery command::</span>
+
+<span class="sd">           celery -A &lt;application_name&gt; inspect clock</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd4</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;celery -A </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="si">}</span><span class="s2"> inspect clock&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd4</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.scheduled"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.scheduled">[docs]</a>    <span class="k">def</span> <span class="nf">scheduled</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See worker that are seconds away of starting a task.\n</span>
+<span class="sd">        Requires a *drop* value.\n</span>
+<span class="sd">        This method runs the following Celery command::</span>
+
+<span class="sd">           celery -A &lt;application_name&gt; inspect scheduled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd5</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;celery -A </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="si">}</span><span class="s2"> inspect scheduled&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd5</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.timers"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.timers">[docs]</a>    <span class="k">def</span> <span class="nf">timers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shows active *Systemd* timers.</span>
+<span class="sd">        This method runs the following command::</span>
+
+<span class="sd">           sudo systemctl --no-pager list-timers</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd6</span> <span class="o">=</span> <span class="s2">&quot;sudo systemctl --no-pager list-timers&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd6</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.active_services"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.active_services">[docs]</a>    <span class="k">def</span> <span class="nf">active_services</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shows active *Systemd* services.\n</span>
+<span class="sd">        This method runs the following command::</span>
+
+<span class="sd">           sudo systemctl --no-pager --type=service</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd7</span> <span class="o">=</span> <span class="s2">&quot;systemctl --no-pager --type=service&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd7</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.service_status"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.service_status">[docs]</a>    <span class="k">def</span> <span class="nf">service_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See *Systemd* services status.\n</span>
+<span class="sd">        Requires a *unit* value.\n</span>
+<span class="sd">        This method runs the following command::</span>
+
+<span class="sd">           sudo systemctl --no-pager status &lt;service&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
+            <span class="n">cmd8</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;systemctl --no-pager status </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd8</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.service_logs"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.service_logs">[docs]</a>    <span class="k">def</span> <span class="nf">service_logs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See logs for specific *Systemd* services.</span>
+
+<span class="sd">        :var str choice: User input. Asks if he wants to see the services belonging to the current *unit* value.</span>
+
+<span class="sd">        If yes, it runs the following command::</span>
+
+<span class="sd">            sudo SYSTEMD_COLORS=1 journalctl | grep &lt;service&gt;\n</span>
+<span class="sd">        If no, it assumes the user wants to have a general view of the</span>
+<span class="sd">        processes, and runs the command::</span>
+
+<span class="sd">            sudo SYSTEMD_COLORS=1 journalctl | grep python3</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">&quot;dummy_service&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
+                <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+                    <span class="n">click</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;[*] - Do you want to see logs for </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">? [y/n] &quot;</span><span class="p">,</span>
+                        <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;bright_green&quot;</span><span class="p">,</span>
+                        <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+                    <span class="n">cmd9</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo SYSTEMD_COLORS=1 journalctl | grep </span><span class="si">{</span><span class="n">choice</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># Without SYSTEMD_COLORS, the output is monochrome.</span>
+                    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd9</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd9_1</span> <span class="o">=</span> <span class="s2">&quot;sudo SYSTEMD_COLORS=1 journalctl | grep python3&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd9_1</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.stop_service"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.stop_service">[docs]</a>    <span class="k">def</span> <span class="nf">stop_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stops execution of *Systemd* services.</span>
+
+<span class="sd">        Requires a *unit* value.</span>
+
+<span class="sd">        Runs the following command::</span>
+
+<span class="sd">           sudo systemctl stop &lt;service&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
+            <span class="n">cmd10</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo systemctl stop </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd10</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.start_service"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.start_service">[docs]</a>    <span class="k">def</span> <span class="nf">start_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts *Systemd* service.</span>
+
+<span class="sd">        Requires a *unit* value.</span>
+
+<span class="sd">        Runs the following command::</span>
+
+<span class="sd">            sudo systemctl start &lt;service&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
+            <span class="n">cmd11</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo systemctl start </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd11</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.daemon_reload"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.daemon_reload">[docs]</a>    <span class="k">def</span> <span class="nf">daemon_reload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reloads the daemons of all services and timers.</span>
+
+<span class="sd">        Necessary after any alteration to the *Systemd* services.</span>
+
+<span class="sd">        Runs the following command::</span>
+
+<span class="sd">            sudo systemctl daemon-reload</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd13</span> <span class="o">=</span> <span class="s2">&quot;sudo systemctl daemon-reload&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd13</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.edit_service"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.edit_service">[docs]</a>    <span class="k">def</span> <span class="nf">edit_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stops the units, opens the service or timer in *$EDITOR*, reloads *Systemmd* daemon and restarts units.</span>
+
+<span class="sd">        Requires a *unit* value.</span>
+
+<span class="sd">        Runs the following commands in succession::</span>
+
+<span class="sd">            sudo systemctl stop &lt;service&gt;</span>
+<span class="sd">            sudo vim /usr/lib/systemd/system/&lt;service&gt;</span>
+<span class="sd">            sudo systemctl daemon-reload</span>
+<span class="sd">            sudo systemctl start &lt;service&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
+            <span class="n">cmd10</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo systemctl stop </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd10</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd12</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo vim &#39;/usr/lib/systemd/system/</span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd12</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd13</span> <span class="o">=</span> <span class="s2">&quot;sudo systemctl daemon-reload&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd13</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd11</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo systemctl start </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd11</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.reset_failed"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.reset_failed">[docs]</a>    <span class="k">def</span> <span class="nf">reset_failed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        After deleting units, run this command to have Systemd erase them.\n</span>
+<span class="sd">        If you don&#39;t, it will complain that it can&#39;t find the unit.</span>
+
+<span class="sd">        Runs the following command::</span>
+
+<span class="sd">            sudo systemctl reset-failed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd14</span> <span class="o">=</span> <span class="s2">&quot;sudo systemctl reset-failed&quot;</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd14</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.delete_service"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.delete_service">[docs]</a>    <span class="k">def</span> <span class="nf">delete_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        1.  Stops the service.</span>
+<span class="sd">        2.  Disables it.</span>
+<span class="sd">        3.  Deletes files.</span>
+
+<span class="sd">        If service is completely erased, it&#39;ll delete also the entry on the json file</span>
+<span class="sd">        and run again the dropdown creation file.</span>
+
+<span class="sd">        :var str decision: User input. Confirms if he wants to delete the services belonging to current *unit*.\n</span>
+<span class="sd">            If &#39;yes&#39;, appends service name to list.\n</span>
+<span class="sd">            If &#39;no&#39;:\n</span>
+<span class="sd">        :var str deci: User input. Asks what *unit* he wants to delete.\n</span>
+<span class="sd">        *deci* appends new choice to list. If no choice was made, the program exits.\n</span>
+<span class="sd">        For each service in the list, these commands are run::</span>
+
+<span class="sd">           sudo systemctl stop &lt;service&gt;</span>
+<span class="sd">           sudo systemctl disable &lt;service&gt;</span>
+<span class="sd">           sudo trash /usr/lib/systemd/system/&lt;service&gt;</span>
+<span class="sd">           sudo systemctl daemon-reload</span>
+<span class="sd">           sudo systemctl reset-failed</span>
+
+<span class="sd">        The *dropdown_info.json* file is updated with the deletion of the service.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">decision_lst</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;dummy_service&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">:</span>
+                <span class="n">decision</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+                    <span class="n">click</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot; ++ Do you want to disable unit </span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">? [y/n] &quot;</span><span class="p">,</span>
+                        <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;bright_white&quot;</span><span class="p">,</span>
+                        <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">decision</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+                    <span class="n">decision_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s2">.service&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">deci</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+                <span class="n">click</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                    <span class="s2">&quot; ++ What unit(s) do you want to delete? &quot;</span><span class="p">,</span>
+                    <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;bright_white&quot;</span><span class="p">,</span>
+                    <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">deci</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">decision</span> <span class="o">=</span> <span class="n">deci</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">decision</span><span class="p">:</span>
+                <span class="n">decision_lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">decision_lst</span><span class="p">:</span>
+            <span class="n">cmd15</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo systemctl stop </span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd15</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd16</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo systemctl disable </span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd16</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd18</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo trash /usr/lib/systemd/system/</span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd18</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd17</span> <span class="o">=</span> <span class="s2">&quot;sudo systemctl daemon-reload&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd17</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd19</span> <span class="o">=</span> <span class="s2">&quot;sudo systemctl reset-failed&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd19</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">monitor</span> <span class="o">=</span> <span class="s2">&quot;/home/mic/python/service_monitoring/service_monitoring&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">/dropdown_info.json&quot;</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;dropinfo&quot;</span><span class="p">])):</span>
+            <span class="k">if</span> <span class="n">decision_lst</span> <span class="o">==</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dropinfo&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dropinfo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">/dropdown_info1.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">/dropdown_info.json&quot;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">/dropdown_info1.json&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">/dropdown_info.json&quot;</span><span class="p">)</span>
+            <span class="n">make_dropdown</span><span class="p">()</span>
+
+        <span class="n">tst</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dropinfo&quot;</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">decision_lst</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tst</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">decision_lst</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;dropinfo&quot;</span><span class="p">])):</span>
+                    <span class="k">if</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dropinfo&quot;</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]:</span>
+                        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dropinfo&quot;</span><span class="p">][</span><span class="n">t</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+                    <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">/dropdown_info1.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                        <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">/dropdown_info.json&quot;</span><span class="p">)</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">/dropdown_info1.json&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">monitor</span><span class="si">}</span><span class="s2">/dropdown_info.json&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">make_dropdown</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># @snoop</span>
+<div class="viewcode-block" id="Answers.create_service"><a class="viewcode-back" href="../../answer_methods.html#service_monitoring.answer_methods.Answers.create_service">[docs]</a>    <span class="k">def</span> <span class="nf">create_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Searches for files with the prefix *service* or *timer* on the</span>
+<span class="sd">        current working directory. If it finds them, it asks if these are the files</span>
+<span class="sd">        to be used.\n</span>
+<span class="sd">        :var str use_choice: User choice. *Do you want to use &lt;service&gt;?* If yes, it runs the method, if no, it will copy a default service file to *cwd* and open it as, *&lt;current_dir&gt;*.service, to create a new service.</span>
+<span class="sd">        :var str unit_making: User choice. *What unit do you want to create?* Service, Timer or both?\n</span>
+<span class="sd">        Runs the following commands::</span>
+
+<span class="sd">            sudo vim &lt;service_name&gt;.service</span>
+<span class="sd">            sudo vim &lt;service_name&gt;.timer\n</span>
+<span class="sd">        These files, pre-built or freshly generated, will be:\n</span>
+<span class="sd">        1.  Copied to the services folder::</span>
+
+<span class="sd">                sudo cp &lt;service&gt; /usr/lib/systemd/system\n</span>
+<span class="sd">        2.  Sent the *daemon-reload* command::</span>
+
+<span class="sd">                sudo systemctl daemon-reload\n</span>
+<span class="sd">        3.  Services are startted::</span>
+
+<span class="sd">                sudo systemctl start &lt;service&gt;\n</span>
+<span class="sd">        4.  Their status checked, to see it they are loaded::</span>
+
+<span class="sd">                sudo systemctl &lt;service&gt; status\n</span>
+<span class="sd">        This new service will be manually added to the json file and the dropdown file updated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cwds</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">services</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">cwds</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="n">services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">services_present</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">services</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.service&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">i</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.timer&quot;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="n">chosen_units</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">user_negs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">services_present</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">services_present</span><span class="p">:</span>
+                <span class="n">use_choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+                    <span class="n">click</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot; ++ Do you want to use </span><span class="si">{</span><span class="n">service</span><span class="si">}</span><span class="s2">? [y/n] &quot;</span><span class="p">,</span>
+                        <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;bright_white&quot;</span><span class="p">,</span>
+                        <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">use_choice</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+                    <span class="n">chosen_units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">use_choice</span> <span class="o">==</span> <span class="s2">&quot;n&quot;</span><span class="p">:</span>
+                    <span class="n">user_negs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">services_present</span> <span class="o">==</span> <span class="p">[]</span> <span class="ow">or</span> <span class="n">user_negs</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="n">unit_making</span> <span class="o">=</span> <span class="n">questionary</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+                <span class="s2">&quot;What units do you want to create?&quot;</span><span class="p">,</span>
+                <span class="n">qmark</span><span class="o">=</span><span class="s2">&quot;[x]&quot;</span><span class="p">,</span>
+                <span class="n">pointer</span><span class="o">=</span><span class="s2">&quot;++&quot;</span><span class="p">,</span>
+                <span class="n">use_indicator</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="n">custom_style_monitor</span><span class="p">,</span>
+                <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Service&quot;</span><span class="p">,</span> <span class="s2">&quot;Timer&quot;</span><span class="p">,</span> <span class="s2">&quot;Both&quot;</span><span class="p">,</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="s2">&quot;Exit&quot;</span><span class="p">],</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+            <span class="n">tail</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">cwds</span><span class="p">))</span>
+            <span class="n">cmd20</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo /usr/bin/vim </span><span class="si">{</span><span class="n">tail</span><span class="si">}</span><span class="s2">.service&quot;</span>
+            <span class="n">cmd21</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sudo /usr/bin/vim </span><span class="si">{</span><span class="n">tail</span><span class="si">}</span><span class="s2">.timer&quot;</span>
+            <span class="k">if</span> <span class="n">unit_making</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">unit_making</span> <span class="o">==</span> <span class="s2">&quot;Exit&quot;</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">unit_making</span> <span class="o">==</span> <span class="s2">&quot;Service&quot;</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd20</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwds</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">chosen_units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tail</span><span class="si">}</span><span class="s2">.service&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">unit_making</span> <span class="o">==</span> <span class="s2">&quot;Timer&quot;</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd21</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwds</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">chosen_units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tail</span><span class="si">}</span><span class="s2">.timer&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">unit_making</span> <span class="o">==</span> <span class="s2">&quot;Both&quot;</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd20</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwds</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd21</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwds</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">chosen_units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tail</span><span class="si">}</span><span class="s2">.service&quot;</span><span class="p">)</span>
+                <span class="n">chosen_units</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tail</span><span class="si">}</span><span class="s2">.timer&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">chosen_units</span><span class="p">:</span>
+            <span class="n">cmd22</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/usr/bin/sudo /usr/bin/cp </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2"> &#39;/usr/lib/systemd/system/&#39;&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd22</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwds</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd23</span> <span class="o">=</span> <span class="s2">&quot;/usr/bin/sudo /usr/bin/systemctl daemon-reload&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd23</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd24</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/usr/bin/sudo /usr/bin/systemctl start </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd24</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">cmd25</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/usr/bin/sudo /usr/bin/systemctl status </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">.txt&quot;</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd25</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">cmd26</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/usr/bin/sudo /usr/bin/systemctl status </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mf">0.30</span><span class="p">)</span>
+        <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">.txt&quot;</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2">.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;^\s+Active: active \(running\).+</span><span class="se">\n</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;^\s+Active: active \(waiting\).+</span><span class="se">\n</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="ow">or</span> <span class="n">w</span><span class="p">:</span>
+                    <span class="n">success</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+                        <span class="n">click</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;++ </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2"> is active. Do you want to see its status? [y/n]: &quot;</span><span class="p">,</span>
+                            <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;bright_white&quot;</span><span class="p">,</span>
+                            <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">success</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+                        <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd26</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="n">click</span><span class="o">.</span><span class="n">style</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot; ++ </span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s2"> is not active. We&#39;ll open the status view for debugging.&quot;</span><span class="p">,</span>
+                            <span class="n">fg</span><span class="o">=</span><span class="s2">&quot;bright_white&quot;</span><span class="p">,</span>
+                            <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">sleep</span><span class="p">(</span><span class="mf">0.30</span><span class="p">)</span>
+                    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd26</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">break</span>
+        <span class="n">entry</span><span class="p">()</span>
+        <span class="n">make_dropdown</span><span class="p">()</span></div></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, mclds
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    </body>
+</html>

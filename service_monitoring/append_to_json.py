@@ -6,14 +6,10 @@ import subprocess
 import sys
 
 import click
-import isort  # noqa: F401
 import questionary
 import snoop
-from making_dropdown_file import make_dropdown
 from questionary import Style
 from snoop import pp
-
-subprocess.run(["isort", __file__])
 
 
 def type_watch(source, value):
@@ -27,12 +23,15 @@ snoop.install(watch_extras=[type_watch])
 # @snoop
 def entry():
     """
-    Where we'll collect from the user
-    the new service values. Because the
-    app units are stored by questionary
-    as a string, we need to transform it
-    in a list, spliting the units on the
-    linebreak symbol.
+    Where we'll collect from the user the new service values.
+    Because the app units are stored by questionary as a string,
+    we need to transform it to list, spliting the units on the
+    linebreak symbol.\n
+    :var str su: User choice. Asks if a new service was created.\n
+    :var str ap: Asked if *su* was positive. User choice. What application does it belong to?
+    :var str nm: Asked if *su* was positive. User choice. What is the service name?
+    :var str pth: Asked if *su* was positive. User choice. What is the app's path?
+    :var str nts: Asked if *su* was positive. User choice. What are its services?\n
     """
 
     json_file = "/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json"
@@ -84,13 +83,24 @@ def entry():
         ).ask()
         unit_lst = nts.split("\n")
         info = [ap, nm, pth, unit_lst]
-        dropinf = {"app": f"{info[0]}", "name": f"{info[1]}", "path": f"{info[2]}", "units": info[3]}
+        dropinf = {
+            "app": f"{info[0]}",
+            "name": f"{info[1]}",
+            "path": f"{info[2]}",
+            "units": info[3],
+        }
         with open(json_file, "r+") as f:
             data = json.load(f)
             data["dropinfo"].append(dropinf)
             f.seek(0)
             json.dump(data, f, indent=4)
-        print(click.style(f"Added to the json file the service with the info: {dropinf}", fg="bright_white", bold=True))
+        print(
+            click.style(
+                f"Added to the json file the service with the info: {dropinf}",
+                fg="bright_white",
+                bold=True,
+            )
+        )
     else:
         nm = questionary.text(
             "What is the name?",
@@ -110,7 +120,13 @@ def entry():
                     f.seek(0)
                     json.dump(data, f, indent=4)
                     break
-        print(click.style(f"Added to the service {nm} the unit {nts}", fg="bright_white", bold=True))
+        print(
+            click.style(
+                f"Added to the service {nm} the unit {nts}",
+                fg="bright_white",
+                bold=True,
+            )
+        )
 
 
 if __name__ == "__main__":
