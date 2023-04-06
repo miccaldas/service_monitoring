@@ -29,12 +29,8 @@ def type_watch(source, value):
 
 snoop.install(watch_extras=[type_watch])
 
-with open(
-    "/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r"
-) as f:
-    servs = (
-        f.read()
-    )  # It has to be read(), not readlines(), because the latter is a list.
+with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r") as f:
+    servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
     info = json.loads(servs)
 
 custom_style_monitor = Style(
@@ -205,7 +201,7 @@ class Answers:
                     )
                 )
                 if choice == "y":
-                    cmd9 = f"sudo SYSTEMD_COLORS=1 journalctl | grep {choice}"  # Without SYSTEMD_COLORS, the output is monochrome.
+                    cmd9 = f"sudo SYSTEMD_COLORS=1 journalctl -u {choice} -S '1 hour ago'"  # Without SYSTEMD_COLORS, the output is monochrome.
                     subprocess.run(cmd9, shell=True)
                     print("\n\n")
                 else:
@@ -371,9 +367,7 @@ class Answers:
         for i in range(len(data["dropinfo"])):
             if decision_lst == data["dropinfo"][i]["units"]:
                 data["dropinfo"].pop(i)
-            open(f"{monitor}/dropdown_info1.json", "w").write(
-                json.dumps(data, indent=4, sort_keys=True)
-            )
+            open(f"{monitor}/dropdown_info1.json", "w").write(json.dumps(data, indent=4, sort_keys=True))
             os.remove(f"{monitor}/dropdown_info.json")
             os.rename(f"{monitor}/dropdown_info1.json", f"{monitor}/dropdown_info.json")
             make_dropdown()
@@ -384,9 +378,7 @@ class Answers:
                 for t in range(len(data["dropinfo"])):
                     if u in data["dropinfo"][t]["units"]:
                         data["dropinfo"][t]["units"].remove(u)
-                    open(f"{monitor}/dropdown_info1.json", "w").write(
-                        json.dumps(data, indent=4, sort_keys=True)
-                    )
+                    open(f"{monitor}/dropdown_info1.json", "w").write(json.dumps(data, indent=4, sort_keys=True))
                     os.remove(f"{monitor}/dropdown_info.json")
                     os.rename(
                         f"{monitor}/dropdown_info1.json",
@@ -428,9 +420,7 @@ class Answers:
         for root, dirs, files in os.walk(cwds):
             for file in files:
                 services.append(file)
-        services_present = [
-            i for i in services if i.endswith(".service") or i.endswith(".timer")
-        ]
+        services_present = [i for i in services if i.endswith(".service") or i.endswith(".timer")]
 
         chosen_units = []
         user_negs = []

@@ -1,14 +1,6 @@
 {
     "dropinfo": [
-        {
-            "app": "none",
-            "name": "Flower",
-            "path": "none",
-            "units": [
-                "flower.service"
-            ]
-        },
-        {
+          {
             "app": "none",
             "name": "Pip",
             "path": "none",
