@@ -6,15 +6,12 @@ from __future__ import unicode_literals
 
 import re
 import subprocess
-import sys
 
 import click
-import isort  # noqa: F401
 import questionary
+
 # import snoop
 from questionary import Separator, Style
-
-subprocess.run(['isort', __file__])
 
 
 # @snoop
@@ -43,11 +40,11 @@ def dropdown():
     )
 
     ambit = questionary.confirm(
-        'Is your question about a specific service?',
-         qmark='[x]',
-         default=False,
-         auto_enter=False,
-         style=custom_style_monitor,
+        "Is your question about a specific service?",
+        qmark="[x]",
+        default=False,
+        auto_enter=False,
+        style=custom_style_monitor,
     ).ask()
 
     if ambit:
@@ -58,39 +55,39 @@ def dropdown():
             use_indicator=True,
             style=custom_style_monitor,
             choices=[
-               'Flower',
-               'Pip',
-               'Yay Querying',
-               'Bkmks Cleaning',
-               Separator("----- EXIT -----"),
-               'Exit'
-            ]
+                "Flower",
+                "Pip",
+                "Yay Querying",
+                "Bkmks Cleaning",
+                Separator("----- EXIT -----"),
+                "Exit",
+            ],
         ).ask()
         resposta = questionary.checkbox(
             "What do you want to see?",
             qmark="[x]",
             pointer="++",
-           style=custom_style_monitor,
-           choices=[
-               Separator("----- CELERY INFORMATION -----"),
-               "See: Clock",
-               "See: Scheduled",
-               "See: Stats",
-               "See: Reports",
-               "See: Events",
-               Separator("----- SYSTEMD INFORMATION -----"),
-               "See: Service_Status",
-               "See: Service_Logs",
-               Separator("----- SYSTEMD ACTIONS -----"),
-               "See: Delete_Service",
-               "See: Create_Service",
-               "See: Stop_Service",
-               "See: Edit_Service",
-               "See: Start_Service",
-               "See: Daemon_Reload",
-               "See: Reset_Failed",
-               Separator("----- EXIT -----"),
-               "Exit",
+            style=custom_style_monitor,
+            choices=[
+                Separator("----- CELERY INFORMATION -----"),
+                "See: Clock",
+                "See: Scheduled",
+                "See: Stats",
+                "See: Reports",
+                "See: Events",
+                Separator("----- SYSTEMD INFORMATION -----"),
+                "See: Service_Status",
+                "See: Service_Logs",
+                Separator("----- SYSTEMD ACTIONS -----"),
+                "See: Delete_Service",
+                "See: Create_Service",
+                "See: Stop_Service",
+                "See: Edit_Service",
+                "See: Start_Service",
+                "See: Daemon_Reload",
+                "See: Reset_Failed",
+                Separator("----- EXIT -----"),
+                "Exit",
             ],
         ).ask()
         print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))
@@ -122,5 +119,5 @@ def dropdown():
         return general
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     dropdown()

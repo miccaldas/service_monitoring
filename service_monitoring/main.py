@@ -8,17 +8,16 @@ in module 'answer_methods.'
 import json
 import os
 import subprocess
-import sys
-
-import snoop
-from snoop import pp
 
 from service_monitoring.answer_methods import Answers
 from service_monitoring.dropdown import dropdown
 
+# import snoop
+# from snoop import pp
 
-def type_watch(source, value):
-    return "type({})".format(source), type(value)
+
+# def type_watch(source, value):
+#     return "type({})".format(source), type(value)
 
 
 # snoop.install(watch_extras=[type_watch])
@@ -67,7 +66,7 @@ def main():
     if "dummy_service" not in dropdown:
         for i in dropdown:
             if i == "Exit":
-                sys.exit()
+                raise SystemExit
         data = []
         for i in range(len(info["dropinfo"])):
             if dropdown[0] == info["dropinfo"][i]["name"]:
@@ -94,7 +93,7 @@ def main():
     else:
         drop = dropdown[0]
         if drop == "Exit":
-            sys.exit()
+            raise SystemExit
         units = dropdown[2]
         ress = []
         answer = Answers(drop, units)

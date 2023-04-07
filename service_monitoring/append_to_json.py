@@ -3,20 +3,21 @@ from __future__ import unicode_literals
 
 import json
 import subprocess
-import sys
 
 import click
 import questionary
-import snoop
+
+# import snoop
 from questionary import Style
-from snoop import pp
+
+# from snoop import pp
 
 
-def type_watch(source, value):
-    return "type({})".format(source), type(value)
+# def type_watch(source, value):
+#     return "type({})".format(source), type(value)
 
 
-snoop.install(watch_extras=[type_watch])
+# snoop.install(watch_extras=[type_watch])
 
 
 # @logger.catch

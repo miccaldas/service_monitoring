@@ -8,26 +8,25 @@ import json
 import os
 import re
 import subprocess
-import sys
 from time import sleep
 
 import click
-import isort  # noqa: F401
 import questionary
-import snoop
+
+# import snoop
 from questionary import Separator, Style
+
 from service_monitoring.append_to_json import entry
 from service_monitoring.make_dropdown import make_dropdown
-from snoop import pp
 
-subprocess.run(["isort", __file__])
-
-
-def type_watch(source, value):
-    return "type({})".format(source), type(value)
+# from snoop import pp
 
 
-snoop.install(watch_extras=[type_watch])
+# def type_watch(source, value):
+#     return "type({})".format(source), type(value)
+
+
+# snoop.install(watch_extras=[type_watch])
 
 with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r") as f:
     servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
@@ -343,7 +342,7 @@ class Answers:
                 )
             )
             if deci == "":
-                sys.exit()
+                raise SystemExit
             else:
                 decision = deci.split(" ")
             for i in decision:
@@ -452,7 +451,7 @@ class Answers:
             if unit_making == "None":
                 pass
             if unit_making == "Exit":
-                sys.exit()
+                raise SystemExit
             if unit_making == "Service":
                 subprocess.run(cmd20, cwd=cwds, shell=True)
                 chosen_units.append(f"{tail}.service")
