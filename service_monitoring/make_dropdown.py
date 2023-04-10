@@ -33,9 +33,7 @@ def make_dropdown():
     info = "/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json"
 
     with open(info, "r") as f:
-        data = (
-            f.read()
-        )  # It has to be read(), not readlines(), because the latter is a list.
+        data = f.read()  # It has to be read(), not readlines(), because the latter is a list.
 
     res = json.loads(data)
 
@@ -65,24 +63,12 @@ def make_dropdown():
         d.write('    "')
         d.write('"')
         d.write('"\n')
-        d.write(
-            "    We'll use Questionary's multiple choice option, to ask what information he wants.\n"
-        )
-        d.write(
-            "    It was used variables to identify the questions strings, because this allows for a\n"
-        )
-        d.write(
-            "    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n"
-        )
-        d.write(
-            "    the same without the loop, the value was always the last if clause value. It was also\n"
-        )
-        d.write(
-            "    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n"
-        )
-        d.write(
-            "    so that, when running 'main', all the necessary information is already processed.\n"
-        )
+        d.write("    We'll use Questionary's multiple choice option, to ask what information he wants.\n")
+        d.write("    It was used variables to identify the questions strings, because this allows for a\n")
+        d.write("    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n")
+        d.write("    the same without the loop, the value was always the last if clause value. It was also\n")
+        d.write("    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n")
+        d.write("    so that, when running 'main', all the necessary information is already processed.\n")
         d.write('    "')
         d.write('"')
         d.write('"\n\n')
@@ -147,9 +133,7 @@ def make_dropdown():
         d.write('               "Exit",\n')
         d.write("            ],\n")
         d.write("        ).ask()\n")
-        d.write(
-            '        print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n'
-        )
+        d.write('        print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n')
         d.write("        response = [app, resposta]\n")
         d.write("        return response\n\n")
         d.write("    if ambit is False:\n")
@@ -172,9 +156,7 @@ def make_dropdown():
         d.write('                "Exit",\n')
         d.write("            ],\n")
         d.write("        ).ask()\n")
-        d.write(
-            '        print(click.style(f"generalist: {generalist}", fg="bright_white", bold=True))\n'
-        )
+        d.write('        print(click.style(f"generalist: {generalist}", fg="bright_white", bold=True))\n')
         d.write('        general = ["dummy_app", generalist, "dummy_service"]\n')
         d.write("        return general\n\n\n")
         d.write("if __name__ == '__main__':\n")

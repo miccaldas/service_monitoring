@@ -67,9 +67,7 @@ class Answers:
 
             celery -A <application_name> inspect active
         """
-        cmd = f"celery -A {self.drop} inspect active"
-        subprocess.run(cmd, shell=True)
-        print("\n\n")
+        self.celerycmd(" inspect active")
 
     # @snoop
     def stats(self):
@@ -80,9 +78,7 @@ class Answers:
 
             celery -A <application_name> inspect stats
         """
-        cmd1 = f"celery -A {self.drop} inspect stats"
-        subprocess.run(cmd1, shell=True)
-        print("\n\n")
+        self.celerycmd(" inspect stats")
 
     # @snoop
     def reports(self):
@@ -93,9 +89,7 @@ class Answers:
 
            celery -A <application_name> inspect report
         """
-        cmd2 = f"celery -A {self.drop} inspect report"
-        subprocess.run(cmd2, shell=True)
-        print("\n\n")
+        self.celerycmd(" inspect report")
 
     # @snoop
     def events(self):
@@ -106,9 +100,7 @@ class Answers:
 
            celery -A <application_name> control events -d
         """
-        cmd3 = f"celery -A {self.drop} control events -d"
-        subprocess.run(cmd3, shell=True)
-        print("\n\n")
+        self.celerycmd(" control events -d")
 
     # @snoop
     def clock(self):
@@ -119,9 +111,7 @@ class Answers:
 
            celery -A <application_name> inspect clock
         """
-        cmd4 = f"celery -A {self.drop} inspect clock"
-        subprocess.run(cmd4, shell=True)
-        print("\n\n")
+        self.celerycmd(" inspect clock")
 
     # @snoop
     def scheduled(self):
@@ -132,8 +122,16 @@ class Answers:
 
            celery -A <application_name> inspect scheduled
         """
-        cmd5 = f"celery -A {self.drop} inspect scheduled"
-        subprocess.run(cmd5, shell=True)
+        self.celerycmd(" inspect scheduled")
+
+    # Suggested by Sourcery
+    def celerycmd(self, arg0):
+        """
+        Centralizes in one place the Celery commands that were repeated
+        in all previous methods.
+        """
+        cmd = f"celery -A {self.drop}{arg0}"
+        subprocess.run(cmd, shell=True)
         print("\n\n")
 
     # @snoop
@@ -144,9 +142,7 @@ class Answers:
 
            sudo systemctl --no-pager list-timers
         """
-        cmd6 = "sudo systemctl --no-pager list-timers"
-        subprocess.run(cmd6, shell=True)
-        print("\n\n")
+        self.res_fail("sudo systemctl --no-pager list-timers")
 
     # @snoop
     def active_services(self):
@@ -156,9 +152,7 @@ class Answers:
 
            sudo systemctl --no-pager --type=service
         """
-        cmd7 = "systemctl --no-pager --type=service"
-        subprocess.run(cmd7, shell=True)
-        print("\n\n")
+        self.res_fail("systemctl --no-pager --type=service")
 
     # @snoop
     def service_status(self):
@@ -203,12 +197,8 @@ class Answers:
                     cmd9 = f"sudo SYSTEMD_COLORS=1 journalctl -u {choice} -S '1 hour ago'"  # Without SYSTEMD_COLORS, the output is monochrome.
                     subprocess.run(cmd9, shell=True)
                     print("\n\n")
-                else:
-                    pass
         else:
-            cmd9_1 = "sudo SYSTEMD_COLORS=1 journalctl | grep python3"
-            subprocess.run(cmd9_1, shell=True)
-            print("\n\n")
+            self.res_fail("sudo SYSTEMD_COLORS=1 journalctl | grep python3")
 
     # @snoop
     def stop_service(self):
@@ -253,9 +243,7 @@ class Answers:
 
             sudo systemctl daemon-reload
         """
-        cmd13 = "sudo systemctl daemon-reload"
-        subprocess.run(cmd13, shell=True)
-        print("\n\n")
+        self.res_fail("sudo systemctl daemon-reload")
 
     # @snoop
     def edit_service(self):
@@ -291,8 +279,12 @@ class Answers:
 
             sudo systemctl reset-failed
         """
-        cmd14 = "sudo systemctl reset-failed"
-        subprocess.run(cmd14, shell=True)
+        self.res_fail("sudo systemctl reset-failed")
+
+    # Suggested by Sourcery
+    def res_fail(self, arg0):
+        cmd6 = arg0
+        subprocess.run(cmd6, shell=True)
         print("\n\n")
 
     # @snoop
@@ -317,8 +309,6 @@ class Answers:
            sudo trash /usr/lib/systemd/system/<service>
            sudo systemctl daemon-reload
            sudo systemctl reset-failed
-
-        The *dropdown_info.json* file is updated with the deletion of the service.
         """
         decision_lst = []
 
@@ -345,9 +335,9 @@ class Answers:
                 raise SystemExit
             else:
                 decision = deci.split(" ")
-            for i in decision:
-                decision_lst.append(i)
-
+            decision_lst.extend(iter(decision))
+        cmd17 = "sudo systemctl daemon-reload"
+        cmd19 = "sudo systemctl reset-failed"
         for service in decision_lst:
             cmd15 = f"sudo systemctl stop {service}"
             subprocess.run(cmd15, shell=True)
@@ -355,9 +345,7 @@ class Answers:
             subprocess.run(cmd16, shell=True)
             cmd18 = f"sudo trash /usr/lib/systemd/system/{service}"
             subprocess.run(cmd18, shell=True)
-            cmd17 = "sudo systemctl daemon-reload"
             subprocess.run(cmd17, shell=True)
-            cmd19 = "sudo systemctl reset-failed"
             subprocess.run(cmd19, shell=True)
 
         monitor = "/home/mic/python/service_monitoring/service_monitoring"
@@ -366,26 +354,25 @@ class Answers:
         for i in range(len(data["dropinfo"])):
             if decision_lst == data["dropinfo"][i]["units"]:
                 data["dropinfo"].pop(i)
-            open(f"{monitor}/dropdown_info1.json", "w").write(json.dumps(data, indent=4, sort_keys=True))
-            os.remove(f"{monitor}/dropdown_info.json")
-            os.rename(f"{monitor}/dropdown_info1.json", f"{monitor}/dropdown_info.json")
-            make_dropdown()
-
+            self.delete_json(monitor, data)
         tst = [v.get("units") for v in data["dropinfo"]]
         if decision_lst not in tst:
             for u in decision_lst:
                 for t in range(len(data["dropinfo"])):
                     if u in data["dropinfo"][t]["units"]:
                         data["dropinfo"][t]["units"].remove(u)
-                    open(f"{monitor}/dropdown_info1.json", "w").write(json.dumps(data, indent=4, sort_keys=True))
-                    os.remove(f"{monitor}/dropdown_info.json")
-                    os.rename(
-                        f"{monitor}/dropdown_info1.json",
-                        f"{monitor}/dropdown_info.json",
-                    )
-                    make_dropdown()
-
+                    self.delete_json(monitor, data)
         print("\n\n")
+
+    # Suggested by Sourcery.
+    def delete_json(self, monitor, data):
+        """
+        The *dropdown_info.json* file is updated with the deletion of the service.
+        """
+        open(f"{monitor}/dropdown_info1.json", "w").write(json.dumps(data, indent=4, sort_keys=True))
+        os.remove(f"{monitor}/dropdown_info.json")
+        os.rename(f"{monitor}/dropdown_info1.json", f"{monitor}/dropdown_info.json")
+        make_dropdown()
 
     # @snoop
     def create_service(self):
@@ -417,8 +404,7 @@ class Answers:
         cwds = os.getcwd()
         services = []
         for root, dirs, files in os.walk(cwds):
-            for file in files:
-                services.append(file)
+            services.extend(iter(files))
         services_present = [i for i in services if i.endswith(".service") or i.endswith(".timer")]
 
         chosen_units = []
@@ -432,42 +418,16 @@ class Answers:
                         bold=True,
                     )
                 )
-                if use_choice == "y":
-                    chosen_units.append(service)
                 if use_choice == "n":
                     user_negs.append("n")
-        if services_present == [] or user_negs != []:
-            unit_making = questionary.select(
-                "What units do you want to create?",
-                qmark="[x]",
-                pointer="++",
-                use_indicator=True,
-                style=custom_style_monitor,
-                choices=["Service", "Timer", "Both", "None", "Exit"],
-            ).ask()
-            tail = os.path.basename(os.path.normpath(cwds))
-            cmd20 = f"sudo /usr/bin/vim {tail}.service"
-            cmd21 = f"sudo /usr/bin/vim {tail}.timer"
-            if unit_making == "None":
-                pass
-            if unit_making == "Exit":
-                raise SystemExit
-            if unit_making == "Service":
-                subprocess.run(cmd20, cwd=cwds, shell=True)
-                chosen_units.append(f"{tail}.service")
-            if unit_making == "Timer":
-                subprocess.run(cmd21, cwd=cwds, shell=True)
-                chosen_units.append(f"{tail}.timer")
-            if unit_making == "Both":
-                subprocess.run(cmd20, cwd=cwds, shell=True)
-                subprocess.run(cmd21, cwd=cwds, shell=True)
-                chosen_units.append(f"{tail}.service")
-                chosen_units.append(f"{tail}.timer")
-
+                elif use_choice == "y":
+                    chosen_units.append(service)
+        if not services_present or user_negs != []:
+            self.new_service(cwds, chosen_units)
+        cmd23 = "/usr/bin/sudo /usr/bin/systemctl daemon-reload"
         for h in chosen_units:
             cmd22 = f"/usr/bin/sudo /usr/bin/cp {h} '/usr/lib/systemd/system/'"
             subprocess.run(cmd22, cwd=cwds, shell=True)
-            cmd23 = "/usr/bin/sudo /usr/bin/systemctl daemon-reload"
             subprocess.run(cmd23, shell=True)
             cmd24 = f"/usr/bin/sudo /usr/bin/systemctl start {h}"
             subprocess.run(cmd24, shell=True)
@@ -493,7 +453,6 @@ class Answers:
                     )
                     if success == "y":
                         subprocess.run(cmd26, shell=True)
-                    break
                 else:
                     print(
                         click.style(
@@ -504,6 +463,32 @@ class Answers:
                     )
                     sleep(0.30)
                     subprocess.run(cmd26, shell=True)
-                    break
+                break
         entry()
         make_dropdown()
+
+    # Suggested by Sourcery
+    def new_service(self, cwds, chosen_units):
+        unit_making = questionary.select(
+            "What units do you want to create?",
+            qmark="[x]",
+            pointer="++",
+            use_indicator=True,
+            style=custom_style_monitor,
+            choices=["Service", "Timer", "Both", "None", "Exit"],
+        ).ask()
+        tail = os.path.basename(os.path.normpath(cwds))
+        cmd20 = f"sudo /usr/bin/vim {tail}.service"
+        cmd21 = f"sudo /usr/bin/vim {tail}.timer"
+        if unit_making == "Exit":
+            raise SystemExit
+        if unit_making == "Service":
+            subprocess.run(cmd20, cwd=cwds, shell=True)
+            chosen_units.append(f"{tail}.service")
+        if unit_making == "Timer":
+            subprocess.run(cmd21, cwd=cwds, shell=True)
+            chosen_units.append(f"{tail}.timer")
+        if unit_making == "Both":
+            subprocess.run(cmd20, cwd=cwds, shell=True)
+            subprocess.run(cmd21, cwd=cwds, shell=True)
+            chosen_units.extend((f"{tail}.service", f"{tail}.timer"))

@@ -91,9 +91,7 @@ def dropdown():
             ],
         ).ask()
         print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))
-        response = [app, resposta]
-        return response
-
+        return [app, resposta]
     if ambit is False:
         generalist = questionary.checkbox(
             "What do you want to see?",
@@ -115,8 +113,7 @@ def dropdown():
             ],
         ).ask()
         print(click.style(f"generalist: {generalist}", fg="bright_white", bold=True))
-        general = ["dummy_app", generalist, "dummy_service"]
-        return general
+        return ["dummy_app", generalist, "dummy_service"]
 
 
 if __name__ == "__main__":

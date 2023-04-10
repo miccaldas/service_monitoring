@@ -24,12 +24,8 @@ from service_monitoring.dropdown import dropdown
 
 dropdown = list(dropdown())
 
-with open(
-    "/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r"
-) as f:
-    servs = (
-        f.read()
-    )  # It has to be read(), not readlines(), because the latter is a list.
+with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r") as f:
+    servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
 info = json.loads(servs)
 
 
@@ -70,9 +66,13 @@ def main():
         data = []
         for i in range(len(info["dropinfo"])):
             if dropdown[0] == info["dropinfo"][i]["name"]:
-                data.append(info["dropinfo"][i]["app"])
-                data.append(info["dropinfo"][i]["path"])
-                data.append(info["dropinfo"][i]["units"])
+                data.extend(
+                    (
+                        info["dropinfo"][i]["app"],
+                        info["dropinfo"][i]["path"],
+                        info["dropinfo"][i]["units"],
+                    )
+                )
                 drop = data[0]
                 path = data[1]
                 units = data[2]
@@ -84,29 +84,30 @@ def main():
                     res = f"answer.{method}()"
                     ress.append(res)
                 for task in ress:
-                    print("\n")
-                    print(
-                        "---------------------------------------------------------------------------"
-                    )
-                    print("\n")
-                    exec(task)
+                    separator(task)
     else:
-        drop = dropdown[0]
-        if drop == "Exit":
-            raise SystemExit
-        units = dropdown[2]
-        ress = []
-        answer = Answers(drop, units)
-        for method in methods:
-            res = f"answer.{method}()"
-            ress.append(res)
-            for task in ress:
-                print("\n")
-                print(
-                    "---------------------------------------------------------------------------"
-                )
-                print("\n")
-                exec(task)
+        definemethods(methods)
+
+
+def definemethods(methods):
+    drop = dropdown[0]
+    if drop == "Exit":
+        raise SystemExit
+    units = dropdown[2]
+    ress = []
+    answer = Answers(drop, units)
+    for method in methods:
+        res = f"answer.{method}()"
+        ress.append(res)
+        for task in ress:
+            separator(task)
+
+
+def separator(task):
+    print("\n")
+    print("---------------------------------------------------------------------------")
+    print("\n")
+    exec(task)
 
 
 if __name__ == "__main__":
