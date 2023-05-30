@@ -20,7 +20,6 @@ from questionary import Style
 # snoop.install(watch_extras=[type_watch])
 
 
-# @logger.catch
 # @snoop
 def entry():
     """
