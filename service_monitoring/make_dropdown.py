@@ -9,19 +9,49 @@ file itself. This way we can update a json file with information, run this
 module, and a new and updated 'dropdown.py' is ready for use!
 """
 import json
+import os
 import subprocess
 
-# import snoop
+import snoop
+from dotenv import load_dotenv
+from mysql.connector import Error, connect
 from questionary import Separator
 
-# def type_watch(source, value):
-#     return "type({})".format(source), type(value)
+
+def type_watch(source, value):
+    return "type({})".format(source), type(value)
 
 
-# snoop.install(watch_extras=[type_watch])
+snoop.install(watch_extras=[type_watch])
+load_dotenv()
 
 
-# @snoop
+@snoop
+def db_call():
+    """
+    Makes the call to the db.
+    """
+    try:
+        conn = connect(
+            host="localhost",
+            user="mic",
+            password="xxxx",
+            database="services",
+        )
+        cur = conn.cursor()
+        query = "SELECT DISTINCT name FROM services"
+        cur.execute(query)
+        data = cur.fetchall()
+    except Error as e:
+        print("Error while connecting to db", e)
+    finally:
+        if conn:
+            conn.close()
+
+    return data
+
+
+@snoop
 def make_dropdown():
     """
     We go line by line, reconstructing the original
@@ -29,15 +59,8 @@ def make_dropdown():
     create loops that will get information from the
     dropdown_info.json file.
     """
-
-    info = "/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json"
-
-    with open(info, "r") as f:
-        data = f.read()  # It has to be read(), not readlines(), because the latter is a list.
-
-    res = json.loads(data)
-
-    drop = "/home/mic/python/service_monitoring/service_monitoring/dropdown.py"
+    drop = os.getenv("DROP")
+    data = db_call()
 
     with open(drop, "w") as d:
         d.write('"')
@@ -53,11 +76,9 @@ def make_dropdown():
         d.write("import subprocess\n")
         d.write("import sys\n\n")
         d.write("import click\n")
-        d.write("import isort  # noqa: F401\n")
         d.write("import questionary\n")
         d.write("# import snoop\n")
         d.write("from questionary import Separator, Style\n\n")
-        d.write("subprocess.run(['isort', __file__])\n\n\n")
         d.write("# @snoop\n")
         d.write("def dropdown():\n")
         d.write('    "')
@@ -100,8 +121,8 @@ def make_dropdown():
         d.write("            use_indicator=True,\n")
         d.write("            style=custom_style_monitor,\n")
         d.write("            choices=[\n")
-        for i in range(len(res["dropinfo"])):
-            d.write(f"               '{res['dropinfo'][i]['name']}',\n")
+        for i in data:
+            d.write(f"               '{i[0]}',\n")
         d.write('               Separator("----- EXIT -----"),\n')
         d.write("               'Exit'\n")
         d.write("            ]\n")
@@ -112,16 +133,10 @@ def make_dropdown():
         d.write('            pointer="++",\n')
         d.write("           style=custom_style_monitor,\n")
         d.write("           choices=[\n")
-        d.write('               Separator("----- CELERY INFORMATION -----"),\n')
-        d.write('               "See: Clock",\n')
-        d.write('               "See: Scheduled",\n')
-        d.write('               "See: Stats",\n')
-        d.write('               "See: Reports",\n')
-        d.write('               "See: Events",\n')
-        d.write('               Separator("----- SYSTEMD INFORMATION -----"),\n')
+        d.write('               Separator("----- INFORMATION -----"),\n')
         d.write('               "See: Service_Status",\n')
         d.write('               "See: Service_Logs",\n')
-        d.write('               Separator("----- SYSTEMD ACTIONS -----"),\n')
+        d.write('               Separator("----- ACTIONS -----"),\n')
         d.write('               "See: Delete_Service",\n')
         d.write('               "See: Create_Service",\n')
         d.write('               "See: Stop_Service",\n')
@@ -143,13 +158,11 @@ def make_dropdown():
         d.write('            pointer="++",\n')
         d.write("            style=custom_style_monitor,\n")
         d.write("            choices=[\n")
-        d.write('                Separator("----- CELERY INFORMATION -----"),\n')
-        d.write('                "See: Active_Nodes",\n')
-        d.write('                Separator("----- SYSTEMD INFORMATION -----"),\n')
+        d.write('                Separator("----- INFORMATION -----"),\n')
         d.write('                "See: Timers",\n')
         d.write('                "See: Active_Services",\n')
         d.write('                "See: Service_Logs",\n')
-        d.write('                Separator("----- SYSTEMD ACTIONS -----"),\n')
+        d.write('                Separator("----- ACTIONS -----"),\n')
         d.write('                "See: Delete_Service",\n')
         d.write('                "See: Create_Service",\n')
         d.write('                Separator("----- EXIT -----"),\n')

@@ -8,28 +8,52 @@ in module 'answer_methods.'
 import json
 import os
 import subprocess
+from contextlib import suppress
+
+import snoop
+from dotenv import load_dotenv
+from mysql.connector import Error, connect
+from snoop import pp
 
 from service_monitoring.answer_methods import Answers
 from service_monitoring.dropdown import dropdown
 
-# import snoop
-# from snoop import pp
+load_dotenv()
+monitor = os.getenv("MONITOR")
 
 
-# def type_watch(source, value):
-#     return "type({})".format(source), type(value)
+def type_watch(source, value):
+    return "type({})".format(source), type(value)
 
 
-# snoop.install(watch_extras=[type_watch])
+snoop.install(watch_extras=[type_watch])
 
 dropdown = list(dropdown())
 
-with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r") as f:
-    servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
-info = json.loads(servs)
+
+@snoop
+def db_call():
+    """
+    Makes calls to the db.
+    """
+    try:
+        conn = connect(
+            host="localhost", user="mic", password="xxxx", database="services"
+        )
+        cur = conn.cursor()
+        query = "SELECT * FROM services"
+        cur.execute(query)
+        data = cur.fetchall()
+    except Error as e:
+        print("Error while connecting to db", e)
+    finally:
+        if conn:
+            conn.close()
+
+    return data
 
 
-# @snoop
+@snoop
 def answer_methods():
     """
     We'll clean the results of list
@@ -48,7 +72,7 @@ def answer_methods():
     return methods
 
 
-# @snoop
+@snoop
 def main():
     """
     We'll collect the return value of
@@ -63,36 +87,42 @@ def main():
         for i in dropdown:
             if i == "Exit":
                 raise SystemExit
-        data = []
-        for i in range(len(info["dropinfo"])):
-            if dropdown[0] == info["dropinfo"][i]["name"]:
-                data.extend(
-                    (
-                        info["dropinfo"][i]["app"],
-                        info["dropinfo"][i]["path"],
-                        info["dropinfo"][i]["units"],
-                    )
-                )
+        data = db_call()
+        for i in data:
+            if dropdown[0] == i[1]:
                 drop = data[0]
-                path = data[1]
-                units = data[2]
-                if path != "none":
-                    os.chdir(path)
+                if i[3] == "service":
+                    service = i[2]
+                else:
+                    service = "None"
+                if i[3] == "timer":
+                    timer = i[2]
+                else:
+                    timer = "None"
+                units = (service, timer)
                 ress = []
                 answer = Answers(drop, units)
                 for method in methods:
                     res = f"answer.{method}()"
                     ress.append(res)
                 for task in ress:
-                    separator(task)
+                    print("\n")
+                    print(
+                        "---------------------------------------------------------------------------"
+                    )
+                    print("\n")
+                    exec(task)
+
     else:
         definemethods(methods)
 
 
+@snoop
 def definemethods(methods):
     drop = dropdown[0]
     if drop == "Exit":
-        raise SystemExit
+        with suppress(KeyboardInterrupt):
+            raise SystemExit
     units = dropdown[2]
     ress = []
     answer = Answers(drop, units)
@@ -100,14 +130,12 @@ def definemethods(methods):
         res = f"answer.{method}()"
         ress.append(res)
         for task in ress:
-            separator(task)
-
-
-def separator(task):
-    print("\n")
-    print("---------------------------------------------------------------------------")
-    print("\n")
-    exec(task)
+            print("\n")
+            print(
+                "---------------------------------------------------------------------------"
+            )
+            print("\n")
+            exec(task)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,13 @@
+[Unit]
+Description=Huey Task Queue Manager
+After=network.target
+
+[Service]
+WorkingDirectory=/home/mic/python/huey/
+ExecStart=/usr/bin/huey_consumer.py tasks.huey -v -l huey.log
+User=mic
+Group=mic
+
+[Install]
+WantedBy=multi-user.target
+

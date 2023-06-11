@@ -8,29 +8,29 @@ import json
 import os
 import re
 import subprocess
+from contextlib import suppress
 from time import sleep
 
 import click
 import questionary
-
-# import snoop
+import snoop
+from dotenv import load_dotenv
+from mysql.connector import Error, connect
 from questionary import Separator, Style
+from snoop import pp
 
-from service_monitoring.append_to_json import entry
+from service_monitoring.add_to_db import entry
 from service_monitoring.make_dropdown import make_dropdown
 
-# from snoop import pp
+
+def type_watch(source, value):
+    return "type({})".format(source), type(value)
 
 
-# def type_watch(source, value):
-#     return "type({})".format(source), type(value)
+load_dotenv()
+monitor = os.getenv("MONITOR")
 
-
-# snoop.install(watch_extras=[type_watch])
-
-with open("/home/mic/python/service_monitoring/service_monitoring/dropdown_info.json", "r") as f:
-    servs = f.read()  # It has to be read(), not readlines(), because the latter is a list.
-    info = json.loads(servs)
+snoop.install(watch_extras=[type_watch])
 
 custom_style_monitor = Style(
     [
@@ -58,83 +58,55 @@ class Answers:
         self.drop = drop
         self.units = units
 
-    # @snoop
-    def active_nodes(self):
+    @snoop
+    def sbproc(self, cmd):
         """
-        How many Celery active nodes are there now?\n
-        Requires a  *drop* value.\n
-        This method runs the following Celery command::
-
-            celery -A <application_name> inspect active
+        Concentrate all subprocess calls in a single function.
         """
-        self.celerycmd(" inspect active")
-
-    # @snoop
-    def stats(self):
-        """
-        Show Celery workers statistics.\n
-        Requires a *drop* value.\n
-        This method runs the following Celery command::
-
-            celery -A <application_name> inspect stats
-        """
-        self.celerycmd(" inspect stats")
-
-    # @snoop
-    def reports(self):
-        """
-        Returns inspect report value.\n
-        Requires a *drop* value.\n
-        This method runs the following Celery command::
-
-           celery -A <application_name> inspect report
-        """
-        self.celerycmd(" inspect report")
-
-    # @snoop
-    def events(self):
-        """
-        See Celery remote control events.\n
-        Requires a *drop* value.\n
-        This method runs the following Celery command::
-
-           celery -A <application_name> control events -d
-        """
-        self.celerycmd(" control events -d")
-
-    # @snoop
-    def clock(self):
-        """
-        Sees clock of Celery's workers.\n
-        Requires a *drop* value.\n
-        This method runs the following Celery command::
-
-           celery -A <application_name> inspect clock
-        """
-        self.celerycmd(" inspect clock")
-
-    # @snoop
-    def scheduled(self):
-        """
-        See worker that are seconds away of starting a task.\n
-        Requires a *drop* value.\n
-        This method runs the following Celery command::
-
-           celery -A <application_name> inspect scheduled
-        """
-        self.celerycmd(" inspect scheduled")
-
-    # Suggested by Sourcery
-    def celerycmd(self, arg0):
-        """
-        Centralizes in one place the Celery commands that were repeated
-        in all previous methods.
-        """
-        cmd = f"celery -A {self.drop}{arg0}"
         subprocess.run(cmd, shell=True)
-        print("\n\n")
 
-    # @snoop
+    @snoop
+    def db_commit(self, query_commit):
+        """
+        Makes db calls where the aim is to commit to the db.
+        """
+        try:
+            conn = connect(
+                host="localhost",
+                user="mic",
+                password="xxxx",
+                database="services",
+            )
+            cur = conn.cursor()
+            cur.execute(query_commit)
+            conn.commit()
+        except Error as e:
+            print("Error while connecting to db", e)
+        finally:
+            if conn:
+                conn.close()
+
+    @snoop
+    def db_getdata(self, query_data):
+        """
+        Makes db calls where the aim is to fetch data.
+        """
+        try:
+            conn = connect(
+                host="localhost", user="mic", password="xxxx", database="services"
+            )
+            cur = conn.cursor()
+            cur.execute(query_data)
+            data = cur.fetchall()
+        except Error as e:
+            print("Error while connecting to db", e)
+        finally:
+            if conn:
+                conn.close()
+
+        return data
+
+    @snoop
     def timers(self):
         """
         Shows active *Systemd* timers.
@@ -142,9 +114,9 @@ class Answers:
 
            sudo systemctl --no-pager list-timers
         """
-        self.res_fail("sudo systemctl --no-pager list-timers")
+        self.sbproc("sudo systemctl --no-pager list-timers")
 
-    # @snoop
+    @snoop
     def active_services(self):
         """
         Shows active *Systemd* services.\n
@@ -152,9 +124,9 @@ class Answers:
 
            sudo systemctl --no-pager --type=service
         """
-        self.res_fail("systemctl --no-pager --type=service")
+        self.sbproc("sudo systemctl --no-pager list-timers")
 
-    # @snoop
+    @snoop
     def service_status(self):
         """
         See *Systemd* services status.\n
@@ -165,10 +137,10 @@ class Answers:
         """
         for unit in self.units:
             cmd8 = f"systemctl --no-pager status {unit}"
-            subprocess.run(cmd8, shell=True)
+            self.sbproc(cmd8)
             print("\n\n")
 
-    # @snoop
+    @snoop
     def service_logs(self):
         """
         See logs for specific *Systemd* services.
@@ -194,13 +166,25 @@ class Answers:
                     )
                 )
                 if choice == "y":
-                    cmd9 = f"sudo SYSTEMD_COLORS=1 journalctl -u {choice} -S '1 hour ago'"  # Without SYSTEMD_COLORS, the output is monochrome.
-                    subprocess.run(cmd9, shell=True)
+                    cmd9 = (
+                        f"sudo SYSTEMD_COLORS=1 journalctl -u {choice} -S '1 hour ago'"
+                    )
+                    self.sbproc(cmd9)
                     print("\n\n")
         else:
-            self.res_fail("sudo SYSTEMD_COLORS=1 journalctl | grep python3")
+            self.sbproc("sudo SYSTEMD_COLORS=1 journalctl | grep python3")
+        self.sbproc("sudo systemctl --no-pager list-timers")
 
-    # @snoop
+    @snoop
+    def disable_service(self):
+        """
+        Disables systemctl service.
+        """
+        for unit in self.units:
+            cmd30 = f"sudo systemctl disable {unit}"
+            self.sbproc(cmd30)
+
+    @snoop
     def stop_service(self):
         """
         Stops execution of *Systemd* services.
@@ -213,10 +197,10 @@ class Answers:
         """
         for unit in self.units:
             cmd10 = f"sudo systemctl stop {unit}"
-            subprocess.run(cmd10, shell=True)
+            self.sbproc(cmd10)
             print("\n\n")
 
-    # @snoop
+    @snoop
     def start_service(self):
         """
         Starts *Systemd* service.
@@ -229,10 +213,10 @@ class Answers:
         """
         for unit in self.units:
             cmd11 = f"sudo systemctl start {unit}"
-            subprocess.run(cmd11, shell=True)
+            self.sbproc(cmd11)
             print("\n\n")
 
-    # @snoop
+    @snoop
     def daemon_reload(self):
         """
         Reloads the daemons of all services and timers.
@@ -243,9 +227,9 @@ class Answers:
 
             sudo systemctl daemon-reload
         """
-        self.res_fail("sudo systemctl daemon-reload")
+        self.sbproc("sudo systemctl daemon-reload")
 
-    # @snoop
+    @snoop
     def edit_service(self):
         """
         Stops the units, opens the service or timer in *$EDITOR*, reloads *Systemmd* daemon and restarts units.
@@ -261,15 +245,15 @@ class Answers:
         """
         for unit in self.units:
             cmd10 = f"sudo systemctl stop {unit}"
-            subprocess.run(cmd10, shell=True)
+            self.sbproc(cmd10)
             cmd12 = f"sudo vim '/usr/lib/systemd/system/{unit}'"
-            subprocess.run(cmd12, shell=True)
+            self.sbproc(cmd12)
             cmd13 = "sudo systemctl daemon-reload"
-            subprocess.run(cmd13, shell=True)
+            self.sbproc(cmd13)
             cmd11 = f"sudo systemctl start {unit}"
-            subprocess.run(cmd11, shell=True)
+            self.sbproc(cmd11)
 
-    # @snoop
+    @snoop
     def reset_failed(self):
         """
         After deleting units, run this command to have Systemd erase them.\n
@@ -279,23 +263,14 @@ class Answers:
 
             sudo systemctl reset-failed
         """
-        self.res_fail("sudo systemctl reset-failed")
+        self.sbproc("sudo systemctl reset-failed")
 
-    # Suggested by Sourcery
-    def res_fail(self, arg0):
-        cmd6 = arg0
-        subprocess.run(cmd6, shell=True)
-        print("\n\n")
-
-    # @snoop
+    @snoop
     def delete_service(self):
         """
         1.  Stops the service.
         2.  Disables it.
         3.  Deletes files.
-
-        If service is completely erased, it'll delete also the entry on the json file
-        and run again the dropdown creation file.
 
         :var str decision: User input. Confirms if he wants to delete the services belonging to current *unit*.\n
             If 'yes', appends service name to list.\n
@@ -310,8 +285,15 @@ class Answers:
            sudo systemctl daemon-reload
            sudo systemctl reset-failed
         """
+        # List whre all services chosen for deletion by the user, will be housed.
         decision_lst = []
 
+        # 'Dummy Service' is posted when doing general queries, those that didn't chose a particular
+        # service at the beginning. If there are no 'dummy_service', that means there are services
+        # associated with this query. We ask the user if he wants de delete them. If yes, we had the
+        # services to 'decision_lst', if no, we assume the user wants to choose another service to
+        # delete. We show him a list of all services and ask him to choose. This seconf option is
+        # what the user would see if he came from a generalistic query.
         if "dummy_service" not in self.units:
             for unit in self.units:
                 decision = input(
@@ -322,59 +304,71 @@ class Answers:
                     )
                 )
                 if decision == "y":
-                    decision_lst.append(f"{unit}.service")
+                    decision_lst.append(f"{unit}")
         else:
-            deci = input(
+            query = "SELECT DISTINCT id, name, unit_name, unit_type FROM services"
+            # Calls function that does db calls to download data.
+            data = self.db_getdata(query)
+            print("\n")
+            print(
                 click.style(
-                    " ++ What unit(s) do you want to delete? ",
+                    " ++ Choose the units to delete.", fg="bright_white", bold=True
+                )
+            )
+            for i in data:
+                print(i)
+                print(click.style(f"{i[0]} - {i[2]}", fg="bright_white", bold=True))
+            generalist_decision = input(
+                click.style(
+                    " ++ Choose a number. ",
                     fg="bright_white",
                     bold=True,
                 )
             )
-            if deci == "":
-                raise SystemExit
+            # If the user doesn't choose a number, we assume he gave up.
+            if generalist_decision == "":
+                with suppress(KeyboardInterrupt):
+                    raise SystemExit
             else:
-                decision = deci.split(" ")
-            decision_lst.extend(iter(decision))
-        cmd17 = "sudo systemctl daemon-reload"
-        cmd19 = "sudo systemctl reset-failed"
+                # If there's a list of services to delete, we separate them by spaces.
+                ids = generalist_decision.split(" ")
+                # We look for service names, based on the id's collected.
+                decision = [c for a, b, c, d in data if str(a) in ids]
+                # And add them to 'decision_lst'.
+                decision_lst.extend(iter(decision))
+
+        # Initiates a series of Systemctl's commands to do during deletion of services.
+        # Although there are methods in this class for most of these commands, they are
+        # written to take the name of the services from 'self.units', not 'decision_lst'.
         for service in decision_lst:
             cmd15 = f"sudo systemctl stop {service}"
-            subprocess.run(cmd15, shell=True)
             cmd16 = f"sudo systemctl disable {service}"
-            subprocess.run(cmd16, shell=True)
+            cmd17 = "sudo systemctl daemon-reload"
             cmd18 = f"sudo trash /usr/lib/systemd/system/{service}"
-            subprocess.run(cmd18, shell=True)
-            subprocess.run(cmd17, shell=True)
-            subprocess.run(cmd19, shell=True)
+            cmd19 = "sudo systemctl reset-failed"
+            for i in [cmd15, cmd16, cmd18, cmd17, cmd19]:
+                self.sbproc(i)
+            # Deletes service if service.
+            if service.endswith("service"):
+                query = f"DELETE FROM services WHERE unit_name = '{service}'"
+                self.db_commit(query)
+            # Deletes service if timer.
+            if service.endswith("timer"):
+                query = f"DELETE FROM services WHERE unit_name = '{service}'"
+                self.db_commit(query)
 
-        monitor = "/home/mic/python/service_monitoring/service_monitoring"
-        data = json.load(open(f"{monitor}/dropdown_info.json"))
-
-        for i in range(len(data["dropinfo"])):
-            if decision_lst == data["dropinfo"][i]["units"]:
-                data["dropinfo"].pop(i)
-            self.delete_json(monitor, data)
-        tst = [v.get("units") for v in data["dropinfo"]]
-        if decision_lst not in tst:
-            for u in decision_lst:
-                for t in range(len(data["dropinfo"])):
-                    if u in data["dropinfo"][t]["units"]:
-                        data["dropinfo"][t]["units"].remove(u)
-                    self.delete_json(monitor, data)
+        print(
+            click.style(
+                f"The service {service} was deleted.",
+                fg="bright_white",
+                bold=True,
+            )
+        )
+        # Rebuilds the choices dropdown.
+        make_dropdown()
         print("\n\n")
 
-    # Suggested by Sourcery.
-    def delete_json(self, monitor, data):
-        """
-        The *dropdown_info.json* file is updated with the deletion of the service.
-        """
-        open(f"{monitor}/dropdown_info1.json", "w").write(json.dumps(data, indent=4, sort_keys=True))
-        os.remove(f"{monitor}/dropdown_info.json")
-        os.rename(f"{monitor}/dropdown_info1.json", f"{monitor}/dropdown_info.json")
-        make_dropdown()
-
-    # @snoop
+    @snoop
     def create_service(self):
         """
         Searches for files with the prefix *service* or *timer* on the
@@ -399,13 +393,15 @@ class Answers:
         4.  Their status checked, to see it they are loaded::
 
                 sudo systemctl <service> status\n
-        This new service will be manually added to the json file and the dropdown file updated.
+        This new service will be added to the db and the dropdown file updated.
         """
         cwds = os.getcwd()
         services = []
         for root, dirs, files in os.walk(cwds):
             services.extend(iter(files))
-        services_present = [i for i in services if i.endswith(".service") or i.endswith(".timer")]
+        services_present = [
+            i for i in services if i.endswith(".service") or i.endswith(".timer")
+        ]
 
         chosen_units = []
         user_negs = []
@@ -422,18 +418,34 @@ class Answers:
                     user_negs.append("n")
                 elif use_choice == "y":
                     chosen_units.append(service)
+
         if not services_present or user_negs != []:
-            self.new_service(cwds, chosen_units)
-        cmd23 = "/usr/bin/sudo /usr/bin/systemctl daemon-reload"
+            namequery = questionary.text(
+                "What do you want to call your service(s)?",
+                qmark="[x]",
+                style=custom_style_monitor,
+            ).ask()
+
+            servicetype = questionary.checkbox(
+                "What Services do You Want to Create?",
+                choices=["service", "timer"],
+                qmark="[x]",
+                style=custom_style_monitor,
+            ).ask()
+
+            for service in servicetype:
+                newservice = f"{namequery}.{service}"
+                h = self.sbproc(f"/usr/bin/sudo /usr/bin/vim {newservice}")
+                chosen_units.append(h)
+
         for h in chosen_units:
             cmd22 = f"/usr/bin/sudo /usr/bin/cp {h} '/usr/lib/systemd/system/'"
-            subprocess.run(cmd22, cwd=cwds, shell=True)
-            subprocess.run(cmd23, shell=True)
             cmd24 = f"/usr/bin/sudo /usr/bin/systemctl start {h}"
-            subprocess.run(cmd24, shell=True)
             cmd25 = f"/usr/bin/sudo /usr/bin/systemctl status {h} > {h}.txt"
-            subprocess.run(cmd25, shell=True)
-
+            self.sbproc(cmd22)
+            self.daemon_reload()
+            self.sbproc(cmd24)
+            self.sbproc(cmd25)
         cmd26 = f"/usr/bin/sudo /usr/bin/systemctl status {h}"
         sleep(0.30)
         if f"{h}.txt":
@@ -452,7 +464,7 @@ class Answers:
                         )
                     )
                     if success == "y":
-                        subprocess.run(cmd26, shell=True)
+                        self.sbpro(cmd26)
                 else:
                     print(
                         click.style(
@@ -462,33 +474,9 @@ class Answers:
                         )
                     )
                     sleep(0.30)
-                    subprocess.run(cmd26, shell=True)
+                    self.sbproc(cmd26)
+                    os.remove(f"{h.txt}")
                 break
-        entry()
-        make_dropdown()
 
-    # Suggested by Sourcery
-    def new_service(self, cwds, chosen_units):
-        unit_making = questionary.select(
-            "What units do you want to create?",
-            qmark="[x]",
-            pointer="++",
-            use_indicator=True,
-            style=custom_style_monitor,
-            choices=["Service", "Timer", "Both", "None", "Exit"],
-        ).ask()
-        tail = os.path.basename(os.path.normpath(cwds))
-        cmd20 = f"sudo /usr/bin/vim {tail}.service"
-        cmd21 = f"sudo /usr/bin/vim {tail}.timer"
-        if unit_making == "Exit":
-            raise SystemExit
-        if unit_making == "Service":
-            subprocess.run(cmd20, cwd=cwds, shell=True)
-            chosen_units.append(f"{tail}.service")
-        if unit_making == "Timer":
-            subprocess.run(cmd21, cwd=cwds, shell=True)
-            chosen_units.append(f"{tail}.timer")
-        if unit_making == "Both":
-            subprocess.run(cmd20, cwd=cwds, shell=True)
-            subprocess.run(cmd21, cwd=cwds, shell=True)
-            chosen_units.extend((f"{tail}.service", f"{tail}.timer"))
+            entry()
+            make_dropdown()
