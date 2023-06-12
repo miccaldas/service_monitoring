@@ -8,25 +8,23 @@ information on it. But because it won't accept an iteration like:
 file itself. This way we can update a json file with information, run this
 module, and a new and updated 'dropdown.py' is ready for use!
 """
-import json
 import os
 import subprocess
 
-import snoop
+# import snoop
 from dotenv import load_dotenv
 from mysql.connector import Error, connect
 from questionary import Separator
 
+# def type_watch(source, value):
+#     return "type({})".format(source), type(value)
 
-def type_watch(source, value):
-    return "type({})".format(source), type(value)
 
-
-snoop.install(watch_extras=[type_watch])
+# snoop.install(watch_extras=[type_watch])
 load_dotenv()
 
 
-@snoop
+# @snoop
 def db_call():
     """
     Makes the call to the db.
@@ -51,7 +49,7 @@ def db_call():
     return data
 
 
-@snoop
+# @snoop
 def make_dropdown():
     """
     We go line by line, reconstructing the original
@@ -84,12 +82,24 @@ def make_dropdown():
         d.write('    "')
         d.write('"')
         d.write('"\n')
-        d.write("    We'll use Questionary's multiple choice option, to ask what information he wants.\n")
-        d.write("    It was used variables to identify the questions strings, because this allows for a\n")
-        d.write("    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n")
-        d.write("    the same without the loop, the value was always the last if clause value. It was also\n")
-        d.write("    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n")
-        d.write("    so that, when running 'main', all the necessary information is already processed.\n")
+        d.write(
+            "    We'll use Questionary's multiple choice option, to ask what information he wants.\n"
+        )
+        d.write(
+            "    It was used variables to identify the questions strings, because this allows for a\n"
+        )
+        d.write(
+            "    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n"
+        )
+        d.write(
+            "    the same without the loop, the value was always the last if clause value. It was also\n"
+        )
+        d.write(
+            "    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n"
+        )
+        d.write(
+            "    so that, when running 'main', all the necessary information is already processed.\n"
+        )
         d.write('    "')
         d.write('"')
         d.write('"\n\n')
@@ -106,72 +116,52 @@ def make_dropdown():
         d.write('            ("text", "fg:#F1E0AC bold"),\n')
         d.write("        ]\n")
         d.write("    )\n\n")
-        d.write("    ambit = questionary.confirm(\n")
-        d.write("        'Is your question about a specific service?',\n")
-        d.write("         qmark='[x]',\n")
-        d.write("         default=False,\n")
-        d.write("         auto_enter=False,\n")
-        d.write("         style=custom_style_monitor,\n")
-        d.write("    ).ask()\n\n")
-        d.write("    if ambit:\n")
-        d.write("        app = questionary.select(\n")
-        d.write('            "What app do you want to use?",\n')
-        d.write('            qmark="[x]",\n')
-        d.write('            pointer="++",\n')
-        d.write("            use_indicator=True,\n")
-        d.write("            style=custom_style_monitor,\n")
-        d.write("            choices=[\n")
+        d.write("    app = questionary.select(\n")
+        d.write('        "What app do you want to use?",\n')
+        d.write('        qmark="[x]",\n')
+        d.write('        pointer="++",\n')
+        d.write("        use_indicator=True,\n")
+        d.write("        style=custom_style_monitor,\n")
+        d.write("        choices=[\n")
         for i in data:
-            d.write(f"               '{i[0]}',\n")
-        d.write('               Separator("----- EXIT -----"),\n')
-        d.write("               'Exit'\n")
-        d.write("            ]\n")
-        d.write("        ).ask()\n")
-        d.write("        resposta = questionary.checkbox(\n")
-        d.write('            "What do you want to see?",\n')
-        d.write('            qmark="[x]",\n')
-        d.write('            pointer="++",\n')
-        d.write("           style=custom_style_monitor,\n")
-        d.write("           choices=[\n")
-        d.write('               Separator("----- INFORMATION -----"),\n')
-        d.write('               "See: Service_Status",\n')
-        d.write('               "See: Service_Logs",\n')
-        d.write('               Separator("----- ACTIONS -----"),\n')
-        d.write('               "See: Delete_Service",\n')
-        d.write('               "See: Create_Service",\n')
-        d.write('               "See: Stop_Service",\n')
-        d.write('               "See: Edit_Service",\n')
-        d.write('               "See: Start_Service",\n')
-        d.write('               "See: Daemon_Reload",\n')
-        d.write('               "See: Reset_Failed",\n')
-        d.write('               Separator("----- EXIT -----"),\n')
-        d.write('               "Exit",\n')
-        d.write("            ],\n")
-        d.write("        ).ask()\n")
-        d.write('        print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n')
-        d.write("        response = [app, resposta]\n")
-        d.write("        return response\n\n")
-        d.write("    if ambit is False:\n")
-        d.write("        generalist = questionary.checkbox(\n")
-        d.write('            "What do you want to see?",\n')
-        d.write('            qmark="[x]",\n')
-        d.write('            pointer="++",\n')
-        d.write("            style=custom_style_monitor,\n")
-        d.write("            choices=[\n")
-        d.write('                Separator("----- INFORMATION -----"),\n')
-        d.write('                "See: Timers",\n')
-        d.write('                "See: Active_Services",\n')
-        d.write('                "See: Service_Logs",\n')
-        d.write('                Separator("----- ACTIONS -----"),\n')
-        d.write('                "See: Delete_Service",\n')
-        d.write('                "See: Create_Service",\n')
-        d.write('                Separator("----- EXIT -----"),\n')
-        d.write('                "Exit",\n')
-        d.write("            ],\n")
-        d.write("        ).ask()\n")
-        d.write('        print(click.style(f"generalist: {generalist}", fg="bright_white", bold=True))\n')
-        d.write('        general = ["dummy_app", generalist, "dummy_service"]\n')
-        d.write("        return general\n\n\n")
+            d.write(f"       '{i[0]}',\n")
+        d.write("        'Other',\n")
+        d.write("            Separator('----- EXIT -----'),\n")
+        d.write("            'Exit'\n")
+        d.write("        ]\n")
+        d.write("    ).ask()\n\n")
+        d.write("    if app == 'Other':\n")
+        d.write(
+            "        app = questionary.text('What service do you want to see?', qmark='[x]', style=custom_style_monitor).ask()\n\n"
+        )
+        d.write("    resposta = questionary.checkbox(\n")
+        d.write('        "What do you want to see?",\n')
+        d.write('        qmark="[x]",\n')
+        d.write('        pointer="++",\n')
+        d.write("        style=custom_style_monitor,\n")
+        d.write("        choices=[\n")
+        d.write('            Separator("----- INFORMATION -----"),\n')
+        d.write("            'service_status',\n")
+        d.write("            'service_logs',\n")
+        d.write("            'timers',\n")
+        d.write("            'active_services',\n")
+        d.write('            Separator("----- ACTIONS -----"),\n')
+        d.write("            'delete_service',\n")
+        d.write("            'create_service',\n")
+        d.write('            "stop_service",\n')
+        d.write("            'edit_service',\n")
+        d.write("            'start_service',\n")
+        d.write("            'daemon_reload',\n")
+        d.write("            'reset_failed',\n")
+        d.write('            Separator("----- EXIT -----"),\n')
+        d.write("            'Exit',\n")
+        d.write("        ],\n")
+        d.write("    ).ask()\n")
+        d.write(
+            '    print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n'
+        )
+        d.write("    response = [app, resposta]\n")
+        d.write("    return response\n\n")
         d.write("if __name__ == '__main__':\n")
         d.write("    dropdown()")
 

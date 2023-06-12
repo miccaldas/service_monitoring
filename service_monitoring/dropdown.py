@@ -38,75 +38,51 @@ def dropdown():
         ]
     )
 
-    ambit = questionary.confirm(
-        'Is your question about a specific service?',
-         qmark='[x]',
-         default=False,
-         auto_enter=False,
-         style=custom_style_monitor,
+    app = questionary.select(
+        "What app do you want to use?",
+        qmark="[x]",
+        pointer="++",
+        use_indicator=True,
+        style=custom_style_monitor,
+        choices=[
+       'Pip',
+       'Yay_Querying',
+       'sm',
+        'Other',
+            Separator('----- EXIT -----'),
+            'Exit'
+        ]
     ).ask()
 
-    if ambit:
-        app = questionary.select(
-            "What app do you want to use?",
-            qmark="[x]",
-            pointer="++",
-            use_indicator=True,
-            style=custom_style_monitor,
-            choices=[
-               'Pip',
-               'Yay_Querying',
-               Separator("----- EXIT -----"),
-               'Exit'
-            ]
-        ).ask()
-        resposta = questionary.checkbox(
-            "What do you want to see?",
-            qmark="[x]",
-            pointer="++",
-           style=custom_style_monitor,
-           choices=[
-               Separator("----- INFORMATION -----"),
-               "See: Service_Status",
-               "See: Service_Logs",
-               Separator("----- ACTIONS -----"),
-               "See: Delete_Service",
-               "See: Create_Service",
-               "See: Stop_Service",
-               "See: Edit_Service",
-               "See: Start_Service",
-               "See: Daemon_Reload",
-               "See: Reset_Failed",
-               Separator("----- EXIT -----"),
-               "Exit",
-            ],
-        ).ask()
-        print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))
-        response = [app, resposta]
-        return response
+    if app == 'Other':
+        app = questionary.text('What service do you want to see?', qmark='[x]', style=custom_style_monitor).ask()
 
-    if ambit is False:
-        generalist = questionary.checkbox(
-            "What do you want to see?",
-            qmark="[x]",
-            pointer="++",
-            style=custom_style_monitor,
-            choices=[
-                Separator("----- INFORMATION -----"),
-                "See: Timers",
-                "See: Active_Services",
-                "See: Service_Logs",
-                Separator("----- ACTIONS -----"),
-                "See: Delete_Service",
-                "See: Create_Service",
-                Separator("----- EXIT -----"),
-                "Exit",
-            ],
-        ).ask()
-        print(click.style(f"generalist: {generalist}", fg="bright_white", bold=True))
-        general = ["dummy_app", generalist, "dummy_service"]
-        return general
-
+    resposta = questionary.checkbox(
+        "What do you want to see?",
+        qmark="[x]",
+        pointer="++",
+        style=custom_style_monitor,
+        choices=[
+            Separator("----- INFORMATION -----"),
+            'service_status',
+            'service_logs',
+            'timers',
+            'active_services',
+            Separator("----- ACTIONS -----"),
+            'delete_service',
+            'create_service',
+            "stop_service",
+            'edit_service',
+            'start_service',
+            'daemon_reload',
+            'reset_failed',
+            Separator("----- EXIT -----"),
+            'Exit',
+        ],
+    ).ask()
+    print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))
+    response = [app, resposta]
+    return response
 
 if __name__ == '__main__':
     dropdown()

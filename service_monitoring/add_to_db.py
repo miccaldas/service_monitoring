@@ -2,26 +2,27 @@
 from __future__ import unicode_literals
 
 import os
-import subprocess
 
 import click
 import questionary
-import snoop
+
+# import snoop
 from dotenv import load_dotenv
 from mysql.connector import Error, connect
 from questionary import Style
-from snoop import pp
+
+# from snoop import pp
 
 
-def type_watch(source, value):
-    return "type({})".format(source), type(value)
+# def type_watch(source, value):
+#     return "type({})".format(source), type(value)
 
 
-snoop.install(watch_extras=[type_watch])
+# snoop.install(watch_extras=[type_watch])
 load_dotenv()
 
 
-@snoop
+# @snoop
 def db_call(query):
     """
     Makes db calls.
@@ -38,7 +39,7 @@ def db_call(query):
             conn.close()
 
 
-@snoop
+# @snoop
 def entry():
     """
     Where we'll collect from the user the new service values.

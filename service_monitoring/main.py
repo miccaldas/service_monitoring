@@ -1,141 +1,57 @@
 """
-Main module where the app is activated.
-We'll call the module 'dropdown', get
-the questions chosen by the user and
-direct them to the proper methods,
-in module 'answer_methods.'
+Starts and orchestrates all functions in the app.
 """
-import json
-import os
-import subprocess
-from contextlib import suppress
+# import snoop
+# from snoop import pp
 
-import snoop
-from dotenv import load_dotenv
-from mysql.connector import Error, connect
-from snoop import pp
-
-from service_monitoring.answer_methods import Answers
-from service_monitoring.dropdown import dropdown
-
-load_dotenv()
-monitor = os.getenv("MONITOR")
+from dropdown import dropdown
+from systemd_methods import Answers
 
 
 def type_watch(source, value):
-    return "type({})".format(source), type(value)
+    return f"type({source})", type(value)
 
 
-snoop.install(watch_extras=[type_watch])
-
-dropdown = list(dropdown())
+# snoop.install(watch_extras=[type_watch])
 
 
-@snoop
-def db_call():
+# @snoop
+def attrlst(ans, action):
     """
-    Makes calls to the db.
+    Creates 'actionmethod' if there's just one action.
     """
-    try:
-        conn = connect(
-            host="localhost", user="mic", password="xxxx", database="services"
-        )
-        cur = conn.cursor()
-        query = "SELECT * FROM services"
-        cur.execute(query)
-        data = cur.fetchall()
-    except Error as e:
-        print("Error while connecting to db", e)
-    finally:
-        if conn:
-            conn.close()
-
-    return data
+    for i in action:
+        actionmethod = getattr(ans, i)
+        actionmethod()
 
 
-@snoop
-def answer_methods():
+# @snoop
+def attrstr(ans, action):
     """
-    We'll clean the results of list
-    'resposta', to get it ready for
-    the main function.
+    Creates 'actionmethod' if there's a list of actions.
     """
-
-    methods = []
-    for i in dropdown[1]:
-        if ":" in i:
-            meth = i.split(":")[1]
-            metho = meth.strip()
-            methos = f"{metho.lower()}"
-            methods.append(methos)
-
-    return methods
+    actionmethod = getattr(ans, action)
+    actionmethod()
 
 
-@snoop
+# @snoop
 def main():
     """
-    We'll collect the return value of
-    'answer_methods', so as to have
-    clean values with the name of
-    the methods to be run.
+    With the information taken from the 'dropdown' function
+    , ['service_name', 'action_name'], I call the 'Answer'
+    class in 'systemd_methods', choosing one of its methods.
     """
-
-    methods = answer_methods()
-
-    if "dummy_service" not in dropdown:
-        for i in dropdown:
-            if i == "Exit":
-                raise SystemExit
-        data = db_call()
-        for i in data:
-            if dropdown[0] == i[1]:
-                drop = data[0]
-                if i[3] == "service":
-                    service = i[2]
-                else:
-                    service = "None"
-                if i[3] == "timer":
-                    timer = i[2]
-                else:
-                    timer = "None"
-                units = (service, timer)
-                ress = []
-                answer = Answers(drop, units)
-                for method in methods:
-                    res = f"answer.{method}()"
-                    ress.append(res)
-                for task in ress:
-                    print("\n")
-                    print(
-                        "---------------------------------------------------------------------------"
-                    )
-                    print("\n")
-                    exec(task)
-
+    # 'dropdown' is a function who shows two 'Questionary' dropdowns: one for choosing a service
+    # another to choose an action. It returns these bits of information in a tuple.
+    drop = dropdown()
+    # 'Answers()' is the class that houses all the action's methods. It has one argument, the name
+    # of the service.
+    ans = Answers(drop[0])
+    # The getattr() function returns the value of the specified attribute from the specified object.
+    if type(drop[1]) is list:
+        attrlst(ans, drop[1])
     else:
-        definemethods(methods)
-
-
-@snoop
-def definemethods(methods):
-    drop = dropdown[0]
-    if drop == "Exit":
-        with suppress(KeyboardInterrupt):
-            raise SystemExit
-    units = dropdown[2]
-    ress = []
-    answer = Answers(drop, units)
-    for method in methods:
-        res = f"answer.{method}()"
-        ress.append(res)
-        for task in ress:
-            print("\n")
-            print(
-                "---------------------------------------------------------------------------"
-            )
-            print("\n")
-            exec(task)
+        attrstr(ans, drop[1])
 
 
 if __name__ == "__main__":

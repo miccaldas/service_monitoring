@@ -1,5 +1,5 @@
 """
-Module Docstring
+Module to delete Systemd's services and correspondent database entries.
 """
 import os
 import subprocess
@@ -9,20 +9,26 @@ import snoop
 from dotenv import load_dotenv
 from mysql.connector import Error, connect
 from questionary import Separator, Style
+from rich import text
+from rich.console import Console
+from rich.table import Table
+
 from service_monitoring.make_dropdown import make_dropdown
-from snoop import pp
+
+# from snoop import pp
 
 
 def type_watch(source, value):
     return f"type({source})", type(value)
 
 
-snoop.install(watch_extras=[type_watch])
+# snoop.install(watch_extras=[type_watch])
 
 load_dotenv()
+console = Console(width=960)
 
 
-@snoop
+# @snoop
 def dbdelunit(selunit):
     """
     Deletes a unit in a service in the database.
@@ -31,10 +37,10 @@ def dbdelunit(selunit):
         delcmd = f"DELETE FROM services WHERE id = {sel}"
         dbcommit(delcmd)
 
-    print("The {selunit} unit(s) were deleted.")
+    console.print(f"  <X> - The {selunit} unit(s) were deleted.", style="bold #E2C275")
 
 
-@snoop
+# @snoop
 def systemctldel(delservices):
     """
     Deletes services or timers
@@ -50,19 +56,20 @@ def systemctldel(delservices):
         for cmd in [a, b, c, d, e]:
             subprocess.run(cmd, shell=True)
 
-    print(f"The {delservices} services were deleted from Systemctl")
+    console.print(
+        f"  <X> - The {delservices} services were deleted from Systemctl.",
+        style="bold #E2C275",
+    )
 
 
-@snoop
+# @snoop
 def dbfetch(query):
     """
     Gets info from the database.
     """
 
     try:
-        conn = connect(
-            host="localhost", user="mic", password="xxxx", database="services"
-        )
+        conn = connect(host="localhost", user="mic", password="xxxx", database="services")
         cur = conn.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -75,16 +82,14 @@ def dbfetch(query):
     return data
 
 
-@snoop
+# @snoop
 def dbcommit(query):
     """
     Sends info to the database.
     """
 
     try:
-        conn = connect(
-            host="localhost", user="mic", password="xxxx", database="services"
-        )
+        conn = connect(host="localhost", user="mic", password="xxxx", database="services")
         cur = conn.cursor()
         cur.execute(query)
         conn.commit()
@@ -94,37 +99,38 @@ def dbcommit(query):
         if conn:
             conn.close()
 
-    print(f"The query {query} was run.")
+    console.print(f"  The query {query} was run.", style="bold #E2C275")
 
 
-@snoop
+# @snoop
 def delete():
-    """"""
-    cstyle = Style(
-        [
-            ("qmark", "fg:#8E806A bold"),
-            ("question", "fg:#E0DDAA bold"),
-            ("answer", "fg:#eeedde"),
-            ("pointer", "fg:#BB6464 bold"),
-            ("highlighted", "fg:#E5E3C9 bold"),
-            ("selected", "fg:#94B49F bold"),
-            ("separator", "fg:#ff5c8d"),
-            ("instruction", "fg:#E4CDA7"),
-            ("text", "fg:#F1E0AC bold"),
-        ]
-    )
+    """
+    Called by 'main'. From information from id's and unit_names,
+    we'll delete by unit_name, first in Systemctl by the name
+    of the service's, then by id's in the database.
+    """
 
+    # First we get information to identify the rows to delete.
     query = "SELECT id, name, unit_name FROM services"
+    # Make a db call.
     data = dbfetch(query)
+    # We print the output, so the user can choose ehat to delete.
     for i in data:
-        print(f"{i[0]} - {i[1]} - {i[2]}")
-        print("\n")
-    delchoice = input("Choose the id's you want. ")
+        console.print(f"  {i[0]} - {i[1]} - {i[2]}", style="bold #939B62", justify="left")
+        # print("\n")
+    delchoice = console.input("[bold #E2C275]  { X } - Choose the id's you want: [/]")
+    # In case we were given more than one id, we seprate them by space.
     selunit = delchoice.split(" ")
+    # This converts the id's into strings, which won't do. We turn them
+    # back to ints.
     delints = [int(i) for i in selunit]
+    # Build a list of unit_names, names, to use when deleting in Systemctl.
     delservices = [i[2] for i in data if i in delints]
+    # Call the function to delete Systemctl's services.
     systemctldel(delservices)
+    # Call function to delete database entries.
     dbdelunit(delints)
+    # We redraw the app's presentation, with the updated number of entries.
     make_dropdown()
 
 
