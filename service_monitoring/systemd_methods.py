@@ -16,12 +16,12 @@ from dotenv import load_dotenv
 from mysql.connector import Error, connect
 from questionary import Separator, Style
 
-# from snoop import pp
-
 from service_monitoring.add_to_db import entry
 from service_monitoring.create_service import maincreate
 from service_monitoring.delete import delete
 from service_monitoring.make_dropdown import make_dropdown
+
+# from snoop import pp
 
 
 def type_watch(source, value):
@@ -130,7 +130,7 @@ class Answers:
         Requires a *who* value.\n
         This method runs the following command::
 
-           sudo systemctl --no-pager status <service>
+           sudo systemctl --no-pager -l status <service>
         """
         cmd8 = f"systemctl --no-pager status {self.who}"
         self.sbproc(cmd8)
@@ -242,8 +242,10 @@ class Answers:
         """
         cmd10 = f"sudo systemctl stop {self.who}"
         self.sbproc(cmd10)
-        cmd12 = f"sudo vim '/usr/lib/systemd/system/{self.who}'"
+        cmd12 = f"sudo vim '/usr/lib/systemd/system/{self.who}.service'"
+        cmd12a = f"sudo vim '/usr/lib/systemd/system/{self.who}.timer'"
         self.sbproc(cmd12)
+        self.sbproc(cmd12a)
         cmd13 = "sudo systemctl daemon-reload"
         self.sbproc(cmd13)
         cmd11 = f"sudo systemctl start {self.who}"
@@ -274,3 +276,11 @@ class Answers:
         Calls external function who creates a systemd service.
         """
         maincreate()
+
+    # @snoop
+    def Exit(self):
+        """
+        Exits the user from any of the dropdowns.
+        """
+        with suppress(KeyboardInterrupt):
+            raise SystemExit()

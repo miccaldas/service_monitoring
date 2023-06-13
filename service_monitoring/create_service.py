@@ -5,30 +5,26 @@ import os
 import pickle
 import re
 import subprocess
-from contextlib import suppress
 
-# import snoop
-from dotenv import load_dotenv
+import snoop
 from mysql.connector import Error, connect
 from rich import text
 from rich.console import Console
 
-# from snoop import pp
-
 from service_monitoring.make_dropdown import make_dropdown
+
+# from snoop import pp
 
 
 def type_watch(source, value):
     return f"type({source})", type(value)
 
 
-# snoop.install(watch_extras=[type_watch])
+snoop.install(watch_extras=[type_watch])
 console = Console(width=260)
 
-load_dotenv()
 
-
-# @snoop
+@snoop
 def create_service_files():
     """
     Creates the files for the service. You can have them pre-written, it'll
@@ -43,7 +39,9 @@ def create_service_files():
     # In case you already have the service's files.
     if units != []:
         for unit in units:
-            prefile = console.input(f"[bold #E2C275]  <X> - Do you want to use the {unit} file?[y/n] ")
+            prefile = console.input(
+                f"[bold #E2C275]  <X> - Do you want to use the {unit} file?[y/n] "
+            )
             if "y":
                 # We create a tuple with the identifiers 'service/timer'
                 if unit.endswith("service"):
@@ -52,8 +50,6 @@ def create_service_files():
                     service_files.append(("timer", f"{unit}"))
 
     title = console.input("[bold #E2C275]   <X> - What is the title of your units? ")
-    # The title is appended to make it easier to register on the database.
-    service_files.append(title)
 
     # In case you haven't.
     if service_files == []:
@@ -73,6 +69,9 @@ def create_service_files():
             subprocess.run(cmd, shell=True)
             service_files.append(("service", f"{title}.service"))
             service_files.append(("timer", f"{title}.timer"))
+
+    # The title is appended to make it easier to register on the database.
+    service_files.append(title)
 
     with open("service_files.bin", "wb") as f:
         pickle.dump(service_files, f)
@@ -115,11 +114,15 @@ def systemctl_deployment():
             x = re.search("^\s+Active: active \(running\).+\n$", line)
             w = re.search("^\s+Active: active \(waiting\).+\n$", line)
             if x or w:
-                success = console.input(f"[bold #E2C275]  <X> - {h} is active. Do you want to see it's status?[y/n] ")
+                success = console.input(
+                    f"[bold #E2C275]  <X> - {h} is active. Do you want to see it's status?[y/n] "
+                )
                 if success == "y":
                     subprocess.run(status, shell=True)
             else:
-                console.print(f"[bold #E2C275]  <X> - {h} is not active. We'll oopen it's status for debugging")
+                console.print(
+                    f"[bold #E2C275]  <X> - {h} is not active. We'll oopen it's status for debugging"
+                )
                 subprocess.run(status, shell=True)
 
 
@@ -142,7 +145,9 @@ def db_input():
                 answers.append(rowtimer)
 
     try:
-        conn = connect(host="localhost", user="mic", password="xxxx", database="services")
+        conn = connect(
+            host="localhost", user="mic", password="xxxx", database="services"
+        )
         cur = conn.cursor()
         for answer in answers:
             query = f"INSERT INTO services (name, unit_name, unit_type) VALUES{answer}"

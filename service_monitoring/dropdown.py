@@ -45,9 +45,9 @@ def dropdown():
         use_indicator=True,
         style=custom_style_monitor,
         choices=[
-       'Pip',
-       'Yay_Querying',
-       'sm',
+       'pypi_updt',
+       'yay_querying',
+       'clidiary_updt',
         'Other',
             Separator('----- EXIT -----'),
             'Exit'

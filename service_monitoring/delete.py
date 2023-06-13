@@ -6,7 +6,6 @@ import subprocess
 
 import questionary
 import snoop
-from dotenv import load_dotenv
 from mysql.connector import Error, connect
 from questionary import Separator, Style
 from rich import text
@@ -24,7 +23,6 @@ def type_watch(source, value):
 
 # snoop.install(watch_extras=[type_watch])
 
-load_dotenv()
 console = Console(width=960)
 
 
@@ -69,7 +67,9 @@ def dbfetch(query):
     """
 
     try:
-        conn = connect(host="localhost", user="mic", password="xxxx", database="services")
+        conn = connect(
+            host="localhost", user="mic", password="xxxx", database="services"
+        )
         cur = conn.cursor()
         cur.execute(query)
         data = cur.fetchall()
@@ -89,7 +89,9 @@ def dbcommit(query):
     """
 
     try:
-        conn = connect(host="localhost", user="mic", password="xxxx", database="services")
+        conn = connect(
+            host="localhost", user="mic", password="xxxx", database="services"
+        )
         cur = conn.cursor()
         cur.execute(query)
         conn.commit()
@@ -116,7 +118,9 @@ def delete():
     data = dbfetch(query)
     # We print the output, so the user can choose ehat to delete.
     for i in data:
-        console.print(f"  {i[0]} - {i[1]} - {i[2]}", style="bold #939B62", justify="left")
+        console.print(
+            f"  {i[0]} - {i[1]} - {i[2]}", style="bold #939B62", justify="left"
+        )
         # print("\n")
     delchoice = console.input("[bold #E2C275]  { X } - Choose the id's you want: [/]")
     # In case we were given more than one id, we seprate them by space.
