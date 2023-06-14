@@ -91,9 +91,7 @@ class Answers:
         Makes db calls where the aim is to fetch data.
         """
         try:
-            conn = connect(
-                host="localhost", user="mic", password="xxxx", database="services"
-            )
+            conn = connect(host="localhost", user="mic", password="xxxx", database="services")
             cur = conn.cursor()
             cur.execute(query_data)
             data = cur.fetchall()
@@ -137,7 +135,9 @@ class Answers:
         cmd8 = f"systemctl --no-pager status {self.who}"
         cmd8a = f"systemctl --no-pager status {self.who}.timer"
         self.sbproc(cmd8)
+        print("\n")
         print(" ------------ ")
+        print("\n")
         self.sbproc(cmd8a)
         print("\n\n")
 
@@ -164,8 +164,13 @@ class Answers:
             )
         )
         if choice == "y":
-            cmd9 = f"sudo SYSTEMD_COLORS=1 journalctl -u {self.who} -S '1 hour ago'"
+            cmd9 = f"sudo SYSTEMD_COLORS=1 journalctl -u {self.who}.timer -S '1 hour ago'"
+            cmd9a = f"sudo SYSTEMD_COLORS=1 journalctl -u {self.who}.timer -S '1 hour ago'"
             self.sbproc(cmd9)
+            print("\n")
+            print(" ------------ ")
+            print("\n")
+            self.sbproc(cmd9a)
             print("\n\n")
         else:
             self.sbproc("sudo SYSTEMD_COLORS=1 journalctl | grep python3")

@@ -49,6 +49,7 @@ def dropdown():
        'yay_querying',
        'clidiary_updt',
        'git_automate',
+       'old_project_watchdog',
         'Other',
             Separator('----- EXIT -----'),
             'Exit'
