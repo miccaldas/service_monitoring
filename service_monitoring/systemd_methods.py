@@ -91,7 +91,9 @@ class Answers:
         Makes db calls where the aim is to fetch data.
         """
         try:
-            conn = connect(host="localhost", user="mic", password="xxxx", database="services")
+            conn = connect(
+                host="localhost", user="mic", password="xxxx", database="services"
+            )
             cur = conn.cursor()
             cur.execute(query_data)
             data = cur.fetchall()
@@ -133,7 +135,10 @@ class Answers:
            sudo systemctl --no-pager -l status <service>
         """
         cmd8 = f"systemctl --no-pager status {self.who}"
+        cmd8a = f"systemctl --no-pager status {self.who}.timer"
         self.sbproc(cmd8)
+        print(" ------------ ")
+        self.sbproc(cmd8a)
         print("\n\n")
 
     # @snoop

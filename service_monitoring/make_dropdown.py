@@ -82,24 +82,12 @@ def make_dropdown():
         d.write('    "')
         d.write('"')
         d.write('"\n')
-        d.write(
-            "    We'll use Questionary's multiple choice option, to ask what information he wants.\n"
-        )
-        d.write(
-            "    It was used variables to identify the questions strings, because this allows for a\n"
-        )
-        d.write(
-            "    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n"
-        )
-        d.write(
-            "    the same without the loop, the value was always the last if clause value. It was also\n"
-        )
-        d.write(
-            "    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n"
-        )
-        d.write(
-            "    so that, when running 'main', all the necessary information is already processed.\n"
-        )
+        d.write("    We'll use Questionary's multiple choice option, to ask what information he wants.\n")
+        d.write("    It was used variables to identify the questions strings, because this allows for a\n")
+        d.write("    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n")
+        d.write("    the same without the loop, the value was always the last if clause value. It was also\n")
+        d.write("    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n")
+        d.write("    so that, when running 'main', all the necessary information is already processed.\n")
         d.write('    "')
         d.write('"')
         d.write('"\n\n')
@@ -131,9 +119,7 @@ def make_dropdown():
         d.write("        ]\n")
         d.write("    ).ask()\n\n")
         d.write("    if app == 'Other':\n")
-        d.write(
-            "        app = questionary.text('What service do you want to see?', qmark='[x]', style=custom_style_monitor).ask()\n\n"
-        )
+        d.write("        app = questionary.text('What service do you want to see?', qmark='[x]', style=custom_style_monitor).ask()\n\n")
         d.write("    resposta = questionary.checkbox(\n")
         d.write('        "What do you want to see?",\n')
         d.write('        qmark="[x]",\n')
@@ -145,21 +131,20 @@ def make_dropdown():
         d.write("            'service_logs',\n")
         d.write("            'timers',\n")
         d.write("            'active_services',\n")
-        d.write('            Separator("----- ACTIONS -----"),\n')
-        d.write("            'delete_service',\n")
-        d.write("            'create_service',\n")
+        d.write('            Separator("----- SERVICE ACTIONS -----"),\n')
         d.write('            "stop_service",\n')
         d.write("            'edit_service',\n")
         d.write("            'start_service',\n")
+        d.write("            Separator('----- GENERAL ACTIONS -----'),\n")
+        d.write("            'delete_service',\n")
+        d.write("            'create_service',\n")
         d.write("            'daemon_reload',\n")
         d.write("            'reset_failed',\n")
         d.write('            Separator("----- EXIT -----"),\n')
         d.write("            'Exit',\n")
         d.write("        ],\n")
         d.write("    ).ask()\n")
-        d.write(
-            '    print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n'
-        )
+        d.write('    print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n')
         d.write("    response = [app, resposta]\n")
         d.write("    return response\n\n")
         d.write("if __name__ == '__main__':\n")
