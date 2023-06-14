@@ -37,7 +37,7 @@ def db_call():
             database="services",
         )
         cur = conn.cursor()
-        query = "SELECT DISTINCT name FROM services"
+        query = "SELECT unit_name FROM services"
         cur.execute(query)
         data = cur.fetchall()
     except Error as e:
@@ -82,12 +82,24 @@ def make_dropdown():
         d.write('    "')
         d.write('"')
         d.write('"\n')
-        d.write("    We'll use Questionary's multiple choice option, to ask what information he wants.\n")
-        d.write("    It was used variables to identify the questions strings, because this allows for a\n")
-        d.write("    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n")
-        d.write("    the same without the loop, the value was always the last if clause value. It was also\n")
-        d.write("    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n")
-        d.write("    so that, when running 'main', all the necessary information is already processed.\n")
+        d.write(
+            "    We'll use Questionary's multiple choice option, to ask what information he wants.\n"
+        )
+        d.write(
+            "    It was used variables to identify the questions strings, because this allows for a\n"
+        )
+        d.write(
+            "    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n"
+        )
+        d.write(
+            "    the same without the loop, the value was always the last if clause value. It was also\n"
+        )
+        d.write(
+            "    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n"
+        )
+        d.write(
+            "    so that, when running 'main', all the necessary information is already processed.\n"
+        )
         d.write('    "')
         d.write('"')
         d.write('"\n\n')
@@ -104,11 +116,10 @@ def make_dropdown():
         d.write('            ("text", "fg:#F1E0AC bold"),\n')
         d.write("        ]\n")
         d.write("    )\n\n")
-        d.write("    app = questionary.select(\n")
+        d.write("    app = questionary.checkbox(\n")
         d.write('        "What app do you want to use?",\n')
         d.write('        qmark="[x]",\n')
         d.write('        pointer="++",\n')
-        d.write("        use_indicator=True,\n")
         d.write("        style=custom_style_monitor,\n")
         d.write("        choices=[\n")
         for i in data:
@@ -119,7 +130,9 @@ def make_dropdown():
         d.write("        ]\n")
         d.write("    ).ask()\n\n")
         d.write("    if app == 'Other':\n")
-        d.write("        app = questionary.text('What service do you want to see?', qmark='[x]', style=custom_style_monitor).ask()\n\n")
+        d.write(
+            "        app = questionary.text('What service do you want to see?', qmark='[x]', style=custom_style_monitor).ask()\n\n"
+        )
         d.write("    resposta = questionary.checkbox(\n")
         d.write('        "What do you want to see?",\n')
         d.write('        qmark="[x]",\n')
@@ -144,7 +157,9 @@ def make_dropdown():
         d.write("            'Exit',\n")
         d.write("        ],\n")
         d.write("    ).ask()\n")
-        d.write('    print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n')
+        d.write(
+            '    print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n'
+        )
         d.write("    response = [app, resposta]\n")
         d.write("    return response\n\n")
         d.write("if __name__ == '__main__':\n")

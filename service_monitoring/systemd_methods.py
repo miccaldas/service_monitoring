@@ -16,10 +16,8 @@ from dotenv import load_dotenv
 from mysql.connector import Error, connect
 from questionary import Separator, Style
 
-from service_monitoring.add_to_db import entry
 from service_monitoring.create_service import maincreate
 from service_monitoring.delete import delete
-from service_monitoring.make_dropdown import make_dropdown
 
 # from snoop import pp
 
@@ -132,13 +130,10 @@ class Answers:
 
            sudo systemctl --no-pager -l status <service>
         """
-        cmd8 = f"systemctl --no-pager status {self.who}"
-        cmd8a = f"systemctl --no-pager status {self.who}.timer"
-        self.sbproc(cmd8)
-        print("\n")
-        print(" ------------ ")
-        print("\n")
-        self.sbproc(cmd8a)
+        for w in self.who:
+            cmd8 = f"systemctl --no-pager status {w}"
+            self.sbproc(cmd8)
+            print("\n")
         print("\n\n")
 
     # @snoop
@@ -156,40 +151,29 @@ class Answers:
 
             sudo SYSTEMD_COLORS=1 journalctl | grep python3
         """
-        choice = input(
-            click.style(
-                f"[*] - Do you want to see logs for {self.who}? [y/n] ",
-                fg="bright_green",
-                bold=True,
-            )
-        )
-        if choice == "y":
-            cmd9 = f"sudo SYSTEMD_COLORS=1 journalctl -u {self.who}.timer -S '1 hour ago'"
-            cmd9a = f"sudo SYSTEMD_COLORS=1 journalctl -u {self.who}.timer -S '1 hour ago'"
+        for w in self.who:
+            cmd9 = f"sudo SYSTEMD_COLORS=1 journalctl -u {w} -S '1 hour ago'"
             self.sbproc(cmd9)
             print("\n")
-            print(" ------------ ")
-            print("\n")
-            self.sbproc(cmd9a)
-            print("\n\n")
-        else:
-            self.sbproc("sudo SYSTEMD_COLORS=1 journalctl | grep python3")
+        print("\n\n")
 
     # @snoop
     def disable_service(self):
         """
         Disables systemctl service.
         """
-        cmd30 = f"sudo systemctl disable {self.who}"
-        self.sbproc(cmd30)
+        for w in self.who:
+            cmd30 = f"sudo systemctl disable {w}"
+            self.sbproc(cmd30)
 
     # @snoop
     def enable_service(self):
         """
         Enables systemctl service.
         """
-        cmd30 = f"sudo systemctl enable {self.who}"
-        self.sbproc(cmd30)
+        for w in self.who:
+            cmd30 = f"sudo systemctl enable {w}"
+            self.sbproc(cmd30)
 
     # @snoop
     def stop_service(self):
@@ -202,9 +186,9 @@ class Answers:
 
            sudo systemctl stop <service>
         """
-
-        cmd10 = f"sudo systemctl stop {self.who}"
-        self.sbproc(cmd10)
+        for w in self.who:
+            cmd10 = f"sudo systemctl stop {w}"
+            self.sbproc(cmd10)
         print("\n\n")
 
     # @snoop
@@ -218,9 +202,9 @@ class Answers:
 
             sudo systemctl start <service>
         """
-
-        cmd11 = f"sudo systemctl start {self.who}"
-        self.sbproc(cmd11)
+        for w in self.who:
+            cmd11 = f"sudo systemctl start {w}"
+            self.sbproc(cmd11)
         print("\n\n")
 
     # @snoop
@@ -250,16 +234,15 @@ class Answers:
             sudo systemctl daemon-reload
             sudo systemctl start <service>
         """
-        cmd10 = f"sudo systemctl stop {self.who}"
-        self.sbproc(cmd10)
-        cmd12 = f"sudo vim '/usr/lib/systemd/system/{self.who}.service'"
-        cmd12a = f"sudo vim '/usr/lib/systemd/system/{self.who}.timer'"
-        self.sbproc(cmd12)
-        self.sbproc(cmd12a)
-        cmd13 = "sudo systemctl daemon-reload"
-        self.sbproc(cmd13)
-        cmd11 = f"sudo systemctl start {self.who}"
-        self.sbproc(cmd11)
+        for w in self.who:
+            cmd10 = f"sudo systemctl stop {w}"
+            self.sbproc(cmd10)
+            cmd12 = f"sudo vim '/usr/lib/systemd/system/{w}'"
+            self.sbproc(cmd12)
+            cmd13 = "sudo systemctl daemon-reload"
+            self.sbproc(cmd13)
+            cmd11 = f"sudo systemctl start {w}"
+            self.sbproc(cmd11)
 
     # @snoop
     def reset_failed(self):

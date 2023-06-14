@@ -38,18 +38,22 @@ def dropdown():
         ]
     )
 
-    app = questionary.select(
+    app = questionary.checkbox(
         "What app do you want to use?",
         qmark="[x]",
         pointer="++",
-        use_indicator=True,
         style=custom_style_monitor,
         choices=[
-       'pypi_updt',
-       'yay_querying',
-       'clidiary_updt',
-       'git_automate',
-       'old_project_watchdog',
+       'pypi_updt.service',
+       'pypi_updt.timer',
+       'yay_querying.service',
+       'clidiary_updt.service',
+       'clidiary_updt.timer',
+       'yay_querying.timer',
+       'git_automate.timer',
+       'git_automate.service',
+       'old_project_watchdog.service',
+       'old_project_watchdog.timer',
         'Other',
             Separator('----- EXIT -----'),
             'Exit'
