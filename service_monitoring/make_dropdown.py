@@ -1,12 +1,11 @@
 """
 Because questionaire demands that the choices information be given explicitely,
-it complicated our desire to automate the insertion of new apps to the process.
+it complicated to automate the insertion of new apps to the dropdown.
 The idea is to have a file where all information needed to process a new app,
 can be written on, and, afer, the dropdown file would read it, and update the
 information on it. But because it won't accept an iteration like:
 'for i in apps, print i', we decided to make dynamical the production of the
-file itself. This way we can update a json file with information, run this
-module, and a new and updated 'dropdown.py' is ready for use!
+file itself.
 """
 import os
 import subprocess
@@ -53,9 +52,7 @@ def db_call():
 def make_dropdown():
     """
     We go line by line, reconstructing the original
-    structure of the file, stopping only when we
-    create loops that will get information from the
-    dropdown_info.json file.
+    structure of the file.
     """
     drop = os.getenv("DROP")
     data = db_call()
@@ -82,24 +79,12 @@ def make_dropdown():
         d.write('    "')
         d.write('"')
         d.write('"\n')
-        d.write(
-            "    We'll use Questionary's multiple choice option, to ask what information he wants.\n"
-        )
-        d.write(
-            "    It was used variables to identify the questions strings, because this allows for a\n"
-        )
-        d.write(
-            "    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n"
-        )
-        d.write(
-            "    the same without the loop, the value was always the last if clause value. It was also\n"
-        )
-        d.write(
-            "    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n"
-        )
-        d.write(
-            "    so that, when running 'main', all the necessary information is already processed.\n"
-        )
+        d.write("    We'll use Questionary's multiple choice option, to ask what information he wants.\n")
+        d.write("    It was used variables to identify the questions strings, because this allows for a\n")
+        d.write("    value, dependent on a series of 'if' statements, to be chosen from them. When I did\n")
+        d.write("    the same without the loop, the value was always the last if clause value. It was also\n")
+        d.write("    added the 'path' and 'units' values to their respective 'app' and 'resposta' variables,\n")
+        d.write("    so that, when running 'main', all the necessary information is already processed.\n")
         d.write('    "')
         d.write('"')
         d.write('"\n\n')
@@ -130,9 +115,7 @@ def make_dropdown():
         d.write("        ]\n")
         d.write("    ).ask()\n\n")
         d.write("    if app == 'Other':\n")
-        d.write(
-            "        app = questionary.text('What service do you want to see?', qmark='[x]', style=custom_style_monitor).ask()\n\n"
-        )
+        d.write("        app = questionary.text('What service do you want to see?', qmark='[x]', style=custom_style_monitor).ask()\n\n")
         d.write("    resposta = questionary.checkbox(\n")
         d.write('        "What do you want to see?",\n')
         d.write('        qmark="[x]",\n')
@@ -157,9 +140,7 @@ def make_dropdown():
         d.write("            'Exit',\n")
         d.write("        ],\n")
         d.write("    ).ask()\n")
-        d.write(
-            '    print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n'
-        )
+        d.write('    print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))\n')
         d.write("    response = [app, resposta]\n")
         d.write("    return response\n\n")
         d.write("if __name__ == '__main__':\n")
