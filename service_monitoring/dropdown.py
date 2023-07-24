@@ -10,8 +10,10 @@ import sys
 
 import click
 import questionary
+
 # import snoop
 from questionary import Separator, Style
+
 
 # @snoop
 def dropdown():
@@ -44,24 +46,24 @@ def dropdown():
         pointer="++",
         style=custom_style_monitor,
         choices=[
-       'pypi_updt.service',
-       'pypi_updt.timer',
-       'yay_querying.service',
-       'clidiary_updt.service',
-       'clidiary_updt.timer',
-       'yay_querying.timer',
-       'git_automate.timer',
-       'git_automate.service',
-       'old_project_watchdog.service',
-       'old_project_watchdog.timer',
-        'Other',
-            Separator('----- EXIT -----'),
-            'Exit'
-        ]
+            "pypi_updt.service",
+            "pypi_updt.timer",
+            "yay_querying.service",
+            "clidiary_updt.service",
+            "clidiary_updt.timer",
+            "yay_querying.timer",
+            "git_automate.timer",
+            "git_automate.service",
+            "old_project_watchdog.service",
+            "old_project_watchdog.timer",
+            "Other",
+            Separator("----- EXIT -----"),
+            "Exit",
+        ],
     ).ask()
 
-    if app == 'Other':
-        app = questionary.text('What service do you want to see?', qmark='[x]', style=custom_style_monitor).ask()
+    if app == "Other":
+        app = questionary.text("What service do you want to see?", qmark="[x]", style=custom_style_monitor).ask()
 
     resposta = questionary.checkbox(
         "What do you want to see?",
@@ -70,26 +72,27 @@ def dropdown():
         style=custom_style_monitor,
         choices=[
             Separator("----- INFORMATION -----"),
-            'service_status',
-            'service_logs',
-            'timers',
-            'active_services',
+            "service_status",
+            "service_logs",
+            "timers",
+            "active_services",
             Separator("----- SERVICE ACTIONS -----"),
             "stop_service",
-            'edit_service',
-            'start_service',
-            Separator('----- GENERAL ACTIONS -----'),
-            'delete_service',
-            'create_service',
-            'daemon_reload',
-            'reset_failed',
+            "edit_service",
+            "start_service",
+            Separator("----- GENERAL ACTIONS -----"),
+            "delete_service",
+            "create_service",
+            "daemon_reload",
+            "reset_failed",
             Separator("----- EXIT -----"),
-            'Exit',
+            "Exit",
         ],
     ).ask()
     print(click.style(f"app: {app}, resposta: {resposta}", fg="bright_white", bold=True))
     response = [app, resposta]
     return response
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     dropdown()
